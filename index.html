@@ -659,7 +659,10 @@ function renderQuestion(){
     choicesEl.appendChild(btn);
   });
  
-  document.getElementById('btnNext').disabled = true;
+  const isLastQuestion = (state.index === state.queue.length - 1);
+  const btnNext = document.getElementById('btnNext');
+  btnNext.textContent = isLastQuestion ? '結果へ' : '次の問題へ';
+  btnNext.disabled = true;
 }
  
 function escapeHtml(str){
@@ -716,17 +719,17 @@ function finishQuiz(){
   const accuracy = Math.round((correct/total)*100);
 
  <!-- 履歴詳細ページ用に、今回の全回答内容を保存しておく -->
- const snapshot = state.answer.map(a => ({
+ const snapshot = state.answers.map(a => ({
    category: a.q.category,
    prompt: a.q.prompt,
-   term: a.p.term,
+   term: a.q.term,
    meaning: a.q.meaning,
    beginner: a.q.beginner,
-   chosenText: a.q.chosenText,
-   correctText: a.q.correctText,
-   isCorrect: a.q.isCorrect,
+   chosenText: a.chosenText,
+   correctText: a.correctText,
+   isCorrect: a.isCorrect,
  }));
-  history.attempts.push({ date: new Date().toISOString(), score: correct, total, accuracy });
+  history.attempts.push({ date: new Date().toISOString(), score: correct, total, accuracy,answers: snapshot });
   if(history.attempts.length > MAX_HISTORY) history.attempts = history.attempts.slice(-MAX_HISTORY);
  
   state.wrong.forEach(q => {
