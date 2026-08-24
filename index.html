@@ -351,7 +351,6 @@
         <div class="panel-stat"><b id="statBest">0%</b><span>最高正答率</span></div>
         <div class="panel-stat"><b id="statLast">0%</b><span>前回の正答率</span></div>
       </div>
-      <div class="weak-list" id="weakList"></div>
       <div class="history-list" id="historyList"></div>
     </div>
   </div>
@@ -407,7 +406,31 @@
     </div>
   </div>
 </section>
- 
+
+<!-- ============ HISTORY DETAIL SCREEN ============ -->
+<section class="screen" id="screen-history-detail">
+  <div class="result-hero">
+    <div class="score-ring" id="hdScoreRing">
+      <div class="pct" id="hdScorePct">0%</div>
+      <div class="sub" id="hdScoreFrac">0 / 0</div>
+    </div>
+    <h2 class="result-headline" id="hdDate"></h2>
+  </div>
+
+  <div class="wrap">
+    <div class="cat-breakdown" id="hdCatBreakdown"></div>
+
+    <div class="review-section">
+      <h3>解答結果一覧</h3>
+      <div id="hdReviewList"></div>
+    </div>
+
+    <div class="result-actions">
+      <button class="btn btn-ghost" id="btnHistoryBack">トップに戻る</button>
+    </div>
+  </div>
+</section> 
+
 <footer>社内学習用クイズアプリ &middot; 出題数はいつでも選び直せます</footer>
  
 <script>
@@ -446,6 +469,8 @@ const screens = {
   start: document.getElementById('screen-start'),
   quiz: document.getElementById('screen-quiz'),
   result: document.getElementById('screen-result'),
+  'history-detail': document.getElementById('screen-history-detail'),
+  <!-- 追加　-->
 };
 function showScreen(name){
   Object.values(screens).forEach(s => s.classList.remove('active'));
@@ -514,36 +539,79 @@ function renderStartStats(){
   document.getElementById('statLast').textContent = last + '%';
   nav.textContent = `前回 ${last}% / 直近${attempts.length}回分の記録`;
  
-  const weakEntries = Object.entries(history.missed)
-    .sort((a,b)=>b[1]-a[1]).slice(0,6);
-  const weakList = document.getElementById('weakList');
-  weakList.innerHTML = '';
-  if(weakEntries.length){
-    weakEntries.forEach(([term,count])=>{
-      const tag = document.createElement('div');
-      tag.className = 'weak-tag';
-      tag.innerHTML = `${term} <b>×${count}</b>`;
-      weakList.appendChild(tag);
-    });
-    btnWeak.style.display = 'inline-block';
-  } else {
-    btnWeak.style.display = 'none';
-  }
+  const weakCount = Object.keys(history.missed).length;
+  btnWeak.style.display = weakCount > 0 ? 'inline-block' : 'none';
  
   const historyList = document.getElementById('historyList');
   historyList.innerHTML = '';
-  attempts.slice().reverse().forEach(a => {
+  attempts.slice().reverse().forEach((a, revIdx) => {
+    const realIndex = attempts.length - 1 - revIdx;
     const row = document.createElement('div');
     row.className = 'history-row';
+    row.style.cursor = 'pointer';
     const d = new Date(a.date);
     const dateStr = `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
     row.innerHTML = `<span class="hr-date">${dateStr}</span><span class="hr-score">${a.score} / ${a.total}（${a.accuracy}%）</span>`;
+    row.addEventListener('click', () => showHistoryDetail(realIndex));
     historyList.appendChild(row);
   });
 }
+
+function showHistoryDetail(index){
+  const attempt = history.attempts[index];
+  if(!attempt || !attempt.answers){
+    alert('この回の詳細データは保存されていません(仕様変更前の記録のためです)。');
+    return;
+  }
+  document.getElementById('hdScoreRing').style.setProperty('--pct', attempt.accuracy);
+  document.getElementById('hdScorePct').textContent = attempt.accuracy + '%';
+  document.getElementById('hdScoreFrac').textContent = `${attempt.score} / ${attempt.total} 問正解`;
+  const d = new Date(attempt.date);
+  document.getElementById('hdDate').textContent = `${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')} の記録`;
+
+  const byCat = {};
+  attempt.answers.forEach(a => {
+    byCat[a.category] = byCat[a.category] || { total:0, correct:0 };
+    byCat[a.category].total++;
+    if(a.isCorrect) byCat[a.category].correct++;
+  });
+  const catEl = document.getElementById('hdCatBreakdown');
+  catEl.innerHTML = '';
+  Object.entries(byCat).forEach(([cat, v]) => {
+    const pct = Math.round((v.correct/v.total)*100);
+    const row = document.createElement('div');
+    row.className = 'cat-row';
+    row.innerHTML = `
+      <div class="cat-row-top"><b>${escapeHtml(cat)}</b><span>${v.correct} / ${v.total}（${pct}%）</span></div>
+      <div class="cat-bar-track"><div class="cat-bar-fill" style="width:${pct}%;"></div></div>
+    `;
+    catEl.appendChild(row);
+  });
+
+  const listEl = document.getElementById('hdReviewList');
+  listEl.innerHTML = '';
+  attempt.answers.forEach((a, i) => {
+    const item = document.createElement('div');
+    item.className = 'review-item ' + (a.isCorrect ? 'correct' : 'wrong');
+    item.innerHTML = `
+      <div class="rt">
+        <span class="cat-badge">${escapeHtml(a.category)}</span>
+        <span class="result-tag ${a.isCorrect ? 'correct' : 'wrong'}">${a.isCorrect ? '正解' : '不正解'}</span>
+        <span>問題 ${i+1}</span>
+      </div>
+      <div class="term">${escapeHtml(a.prompt)}</div>
+      ${a.isCorrect ? '' : `<div class="your-answer">あなたの回答: ${escapeHtml(a.chosenText)}</div>`}
+      <div class="meaning"><b>${escapeHtml(a.term)}</b>：${escapeHtml(a.meaning)}</div>
+      <div class="beginner">${escapeHtml(a.beginner)}</div>
+    `;
+    listEl.appendChild(item);
+  });
+
+  showScreen('history-detail');
+}
  
 /* ---------- Quiz flow ---------- */
-function startQuiz(questionSet, countOverride){
+function startQuiz(questionSet, countOverride,mode){
   const n = countOverride || Math.min(selectedCount, questionSet.length);
   const pool = shuffle(questionSet);
   state = {
@@ -554,6 +622,8 @@ function startQuiz(questionSet, countOverride){
     answers: [],
     currentOrder: null,
     selectedOptionIndex: null,
+    mode: mode || 'normal'
+    <!-- 苦手な問題を正解したら次回以降出ないようにする -->
   };
   document.getElementById('qTotal').textContent = state.queue.length;
   showScreen('quiz');
@@ -644,13 +714,32 @@ function finishQuiz(){
   const total = state.queue.length;
   const correct = state.score;
   const accuracy = Math.round((correct/total)*100);
- 
+
+ <!-- 履歴詳細ページ用に、今回の全回答内容を保存しておく -->
+ const snapshot = state.answer.map(a => ({
+   category: a.q.category,
+   prompt: a.q.prompt,
+   term: a.p.term,
+   meaning: a.q.meaning,
+   beginner: a.q.beginner,
+   chosenText: a.q.chosenText,
+   correctText: a.q.correctText,
+   isCorrect: a.q.isCorrect,
+ }));
   history.attempts.push({ date: new Date().toISOString(), score: correct, total, accuracy });
   if(history.attempts.length > MAX_HISTORY) history.attempts = history.attempts.slice(-MAX_HISTORY);
  
   state.wrong.forEach(q => {
     history.missed[q.term] = (history.missed[q.term] || 0) + 1;
   });
+
+  <!-- 苦手副種モードで正解した用語は、次回の苦手復習の対象から外す -->
+  if(state.mode === 'weak'){
+    state.answers.forEach(a => {
+      if(a.isCorrect) delete history.missed[a.q.term];
+    });
+  }
+
   saveHistory(history);
  
   document.getElementById('scoreRing').style.setProperty('--pct', accuracy);
@@ -722,7 +811,7 @@ document.getElementById('btnStart').addEventListener('click', () => startQuiz(AL
 document.getElementById('btnReviewWeak').addEventListener('click', () => {
   const weakTerms = new Set(Object.keys(history.missed));
   const set = ALL_QUESTIONS.filter(q => weakTerms.has(q.term));
-  if(set.length){ startQuiz(set, set.length); } else { startQuiz(ALL_QUESTIONS); }
+  if(set.length){ startQuiz(set, set.length,'weak'); } else { startQuiz(ALL_QUESTIONS); }
 });
 document.getElementById('btnRetryWrong').addEventListener('click', () => {
   if(state.wrong.length === 0){ startQuiz(ALL_QUESTIONS); return; }
@@ -730,7 +819,9 @@ document.getElementById('btnRetryWrong').addEventListener('click', () => {
 });
 document.getElementById('btnRetryAll').addEventListener('click', () => startQuiz(ALL_QUESTIONS));
 document.getElementById('btnHome').addEventListener('click', () => { showScreen('start'); renderStartStats(); });
- 
+document.getElementById('btnHistoryBack').addEventListener('click', () => { showScreen('start'); renderStartStats(); });
+<!-- ここ不安！！！！！！！！！！！！！！ --> 
+
 renderCountChips();
 renderStartStats();
 </script>
