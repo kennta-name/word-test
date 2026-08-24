@@ -782,18 +782,35 @@ footer {
   padding: 12px 20px;
 }
  
-/* ---------- コンテンツ幅ラッパー（HTML側は .container ではなく .wrap） ---------- */
+/* ---------- コンテンツ幅ラッパー（HTML側は .container ではなく .wrap） ----------
+   窮屈さの解消のため、幅・左右余白・上部の余白を拡張。 */
 .wrap {
   width: 100%;
-  max-width: 720px;
+  max-width: 820px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 40px 28px 0;
 }
  
-/* クイズ画面専用の縦方向余白 */
+/* クイズ画面専用の縦方向余白（.wrapのpadding-topを上書き） */
 .quiz-shell {
   padding-top: 24px;
   padding-bottom: 80px;
+}
+ 
+/* ---------- ヒーローの中央寄せ（左端が見切れる問題の解消） ----------
+   .heroの背景は画面幅いっぱいのまま、中のテキストだけを
+   .wrapと同じ820px幅を基準に中央へ寄せる。 */
+.hero {
+  padding-left: max(28px, calc((100% - 820px) / 2));
+  padding-right: max(28px, calc((100% - 820px) / 2));
+}
+ 
+/* パネル同士の縦の間隔（窮屈さの解消） */
+.panel {
+  margin-bottom: 28px;
+}
+.panel:last-child {
+  margin-bottom: 0;
 }
  
 /* ---------- 出題数チップの並び（HTML側は .chip-group ではなく .count-chips） ---------- */
@@ -1034,6 +1051,74 @@ footer {
 }
  
 /* ==========================================================================
+   窮屈さの解消：カード・行要素の余白を少し広げる
+   ========================================================================== */
+.question-card {
+  padding: 28px 30px;
+}
+.choice {
+  padding: 16px 18px;
+  gap: 14px;
+}
+.choices {
+  gap: 14px;
+}
+.spec-row {
+  gap: 10px;
+}
+.spec-chip {
+  padding: 6px 14px;
+}
+.cta-row {
+  gap: 14px;
+}
+.history-row,
+.fav-row-item {
+  padding: 12px 16px;
+}
+.history-list,
+.fav-preview-list {
+  gap: 10px;
+}
+.fav-card {
+  padding: 20px 24px;
+}
+.fav-list-container {
+  gap: 14px;
+}
+.review-item {
+  padding: 18px 22px;
+}
+#reviewList,
+#hdReviewList {
+  gap: 18px;
+}
+ 
+/* ==========================================================================
+   解答結果一覧のお気に入りボタン
+   ========================================================================== */
+.review-item .rt {
+  position: relative;
+}
+.review-fav-btn {
+  margin-left: auto;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  color: var(--line);
+  padding: 0;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+.review-fav-btn:hover {
+  transform: scale(1.15);
+}
+.review-fav-btn.active {
+  color: var(--yellow);
+}
+ 
+/* ==========================================================================
    モバイル調整（既存の@mediaは変更せず、別ブロックとして追加）
    ========================================================================== */
 @media (max-width: 600px) {
@@ -1042,6 +1127,16 @@ footer {
   }
   .result-actions {
     padding-bottom: 40px;
+  }
+  .wrap {
+    padding: 28px 20px 0;
+  }
+  .hero {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .question-card {
+    padding: 22px 20px;
   }
 }
  
@@ -1216,12 +1311,36 @@ const MAX_HISTORY = 10;
 const MAX_QUESTIONS = ALL_QUESTIONS.length;
  
 /* ---------- Storage Utilities ---------- */
+/* 日付表記を "M/D HH:MM" 形式に統一するヘルパー */
+function formatDateLabel(d) {
+  return `${d.getMonth() + 1}/${d.getDate()} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+}
+ 
+/* 旧バージョンで保存された記録（pct未保存・日付がISO文字列など）を
+   現在のフォーマットに揃えるための正規化処理。
+   スコア/正答率は score・total から常に再計算することで、
+   「NaN%」「undefined%」を確実に解消する。 */
+function normalizeAttempt(att) {
+  const total = Number(att.total) || 0;
+  const score = Number(att.score) || 0;
+  const pct = total > 0 ? Math.round((score / total) * 100) : 0;
+ 
+  let dateLabel = att.date;
+  if (typeof dateLabel !== 'string' || /^\d{4}-\d{2}-\d{2}T/.test(dateLabel)) {
+    const parsed = new Date(dateLabel);
+    dateLabel = isNaN(parsed.getTime()) ? '' : formatDateLabel(parsed);
+  }
+ 
+  return { ...att, score, total, pct, date: dateLabel };
+}
+ 
 function loadHistory() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return { attempts: [], missed: {} };
     const parsed = JSON.parse(raw);
-    return { attempts: parsed.attempts || [], missed: parsed.missed || {} };
+    const attempts = (parsed.attempts || []).map(normalizeAttempt);
+    return { attempts, missed: parsed.missed || {} };
   } catch (e) {
     return { attempts: [], missed: {} };
   }
@@ -1266,6 +1385,7 @@ function clearProgress() {
 }
  
 let history = loadHistory();
+saveHistory(history); // 正規化した記録をブラウザ側にも保存し直す
 let favorites = loadFavorites();
 let selectedCount = Math.min(30, MAX_QUESTIONS);
  
@@ -1346,6 +1466,23 @@ function toggleFavorite(qId) {
   }
   saveFavorites(favorites);
   renderStartStats();
+}
+ 
+/* 解答結果一覧(結果画面・履歴詳細画面)に表示するお気に入りボタンのHTML */
+function renderReviewFavButtonHTML(qId) {
+  const active = isFavorite(qId);
+  return `<button type="button" class="review-fav-btn${active ? ' active' : ''}" data-qid="${qId}" title="お気に入り登録">${active ? '★' : '☆'}</button>`;
+}
+ 
+/* #reviewList / #hdReviewList 内のお気に入りボタンをクリックしたときの処理（イベント委任） */
+function handleReviewFavClick(e) {
+  const btn = e.target.closest('.review-fav-btn');
+  if (!btn) return;
+  const qId = Number(btn.dataset.qid);
+  toggleFavorite(qId);
+  const active = isFavorite(qId);
+  btn.textContent = active ? '★' : '☆';
+  btn.classList.toggle('active', active);
 }
  
 function renderFavoritesPreview() {
@@ -1575,7 +1712,10 @@ function renderQuestion() {
     choicesContainer.appendChild(btn);
   });
  
-  document.getElementById('btnNext').disabled = (state.selectedOptionIndex === null);
+  const nextBtn = document.getElementById('btnNext');
+  const isLastQuestion = (state.index === state.queue.length - 1);
+  nextBtn.textContent = isLastQuestion ? '結果を見る' : '次の問題へ';
+  nextBtn.disabled = (state.selectedOptionIndex === null);
 }
  
 function handleNextQuestion() {
@@ -1618,7 +1758,7 @@ function finishQuiz() {
  
   // 履歴保存
   const now = new Date();
-  const dateStr = `${now.getMonth() + 1}/${now.getDate()} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+  const dateStr = formatDateLabel(now);
  
   const attemptRecord = {
     date: dateStr,
@@ -1698,6 +1838,7 @@ function renderResultScreen(record) {
       <div class="rt">
         <span class="result-tag ${a.isCorrect ? 'correct' : 'wrong'}">${a.isCorrect ? '正解' : '不正解'}</span>
         <span>${q.category}</span>
+        ${renderReviewFavButtonHTML(q.id)}
       </div>
       <div class="term">${q.term}</div>
       <div class="meaning">${q.meaning}</div>
@@ -1756,6 +1897,7 @@ function showHistoryDetail(att) {
       <div class="rt">
         <span class="result-tag ${a.isCorrect ? 'correct' : 'wrong'}">${a.isCorrect ? '正解' : '不正解'}</span>
         <span>${q.category}</span>
+        ${renderReviewFavButtonHTML(q.id)}
       </div>
       <div class="term">${q.term}</div>
       <div class="meaning">${q.meaning}</div>
@@ -1821,6 +1963,10 @@ document.getElementById('btnHistoryBack').addEventListener('click', () => {
   renderStartStats();
   showScreen('start');
 });
+ 
+/* 解答結果一覧のお気に入りボタン（結果画面・履歴詳細画面 共通） */
+document.getElementById('reviewList').addEventListener('click', handleReviewFavClick);
+document.getElementById('hdReviewList').addEventListener('click', handleReviewFavClick);
  
 /* ---------- Initialize App ---------- */
 renderCountChips();

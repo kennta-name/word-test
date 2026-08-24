@@ -775,18 +775,35 @@ footer {
   padding: 12px 20px;
 }
  
-/* ---------- コンテンツ幅ラッパー（HTML側は .container ではなく .wrap） ---------- */
+/* ---------- コンテンツ幅ラッパー（HTML側は .container ではなく .wrap） ----------
+   窮屈さの解消のため、幅・左右余白・上部の余白を拡張。 */
 .wrap {
   width: 100%;
-  max-width: 720px;
+  max-width: 820px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 40px 28px 0;
 }
  
-/* クイズ画面専用の縦方向余白 */
+/* クイズ画面専用の縦方向余白（.wrapのpadding-topを上書き） */
 .quiz-shell {
   padding-top: 24px;
   padding-bottom: 80px;
+}
+ 
+/* ---------- ヒーローの中央寄せ（左端が見切れる問題の解消） ----------
+   .heroの背景は画面幅いっぱいのまま、中のテキストだけを
+   .wrapと同じ820px幅を基準に中央へ寄せる。 */
+.hero {
+  padding-left: max(28px, calc((100% - 820px) / 2));
+  padding-right: max(28px, calc((100% - 820px) / 2));
+}
+ 
+/* パネル同士の縦の間隔（窮屈さの解消） */
+.panel {
+  margin-bottom: 28px;
+}
+.panel:last-child {
+  margin-bottom: 0;
 }
  
 /* ---------- 出題数チップの並び（HTML側は .chip-group ではなく .count-chips） ---------- */
@@ -1027,6 +1044,74 @@ footer {
 }
  
 /* ==========================================================================
+   窮屈さの解消：カード・行要素の余白を少し広げる
+   ========================================================================== */
+.question-card {
+  padding: 28px 30px;
+}
+.choice {
+  padding: 16px 18px;
+  gap: 14px;
+}
+.choices {
+  gap: 14px;
+}
+.spec-row {
+  gap: 10px;
+}
+.spec-chip {
+  padding: 6px 14px;
+}
+.cta-row {
+  gap: 14px;
+}
+.history-row,
+.fav-row-item {
+  padding: 12px 16px;
+}
+.history-list,
+.fav-preview-list {
+  gap: 10px;
+}
+.fav-card {
+  padding: 20px 24px;
+}
+.fav-list-container {
+  gap: 14px;
+}
+.review-item {
+  padding: 18px 22px;
+}
+#reviewList,
+#hdReviewList {
+  gap: 18px;
+}
+ 
+/* ==========================================================================
+   解答結果一覧のお気に入りボタン
+   ========================================================================== */
+.review-item .rt {
+  position: relative;
+}
+.review-fav-btn {
+  margin-left: auto;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  color: var(--line);
+  padding: 0;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+.review-fav-btn:hover {
+  transform: scale(1.15);
+}
+.review-fav-btn.active {
+  color: var(--yellow);
+}
+ 
+/* ==========================================================================
    モバイル調整（既存の@mediaは変更せず、別ブロックとして追加）
    ========================================================================== */
 @media (max-width: 600px) {
@@ -1035,6 +1120,16 @@ footer {
   }
   .result-actions {
     padding-bottom: 40px;
+  }
+  .wrap {
+    padding: 28px 20px 0;
+  }
+  .hero {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .question-card {
+    padding: 22px 20px;
   }
 }
  
