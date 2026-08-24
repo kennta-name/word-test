@@ -134,17 +134,29 @@
     font-size:15px; padding:12px 20px; border:1.5px solid var(--blue-soft);
   }
   .btn-ghost:hover{ background:var(--blue-soft); }
+  .btn-ghost.small{ font-size:13px; padding:8px 16px; }
   .btn:disabled{ opacity:.4; cursor:not-allowed; }
  
   .cta-row{ display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
  
-  /* Stats panel on start screen */
+  /* Count selector */
   .panel{
-    max-width:640px; margin:0 auto 40px; padding:28px;
+    max-width:640px; margin:0 auto 32px; padding:28px;
     background:var(--bg-alt); border-radius:var(--radius-lg);
     text-align:left;
   }
   .panel h3{ margin:0 0 16px; font-size:15px; font-weight:600; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.04em;}
+  .count-chips{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
+  .count-chip{
+    border:1.5px solid var(--line); background:#fff; color:var(--ink);
+    border-radius:999px; padding:10px 18px; font-size:14px; font-weight:600;
+    cursor:pointer; transition:all .15s ease;
+  }
+  .count-chip:hover{ border-color:var(--blue); }
+  .count-chip.active{ background:var(--blue); border-color:var(--blue); color:#fff; }
+  .count-hint{ text-align:center; font-size:13px; color:var(--ink-soft); margin-top:14px; }
+ 
+  /* Stats panel on start screen */
   .panel-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
   .panel-stat b{ display:block; font-size:26px; font-weight:700; letter-spacing:-0.02em; }
   .panel-stat span{ font-size:13px; color:var(--ink-soft); }
@@ -156,8 +168,21 @@
   }
   .weak-tag b{ color:var(--red); font-weight:700; }
  
+  .history-list{ margin-top:20px; display:flex; flex-direction:column; gap:8px; }
+  .history-row{
+    display:flex; justify-content:space-between; align-items:center;
+    background:#fff; border:1px solid var(--line); border-radius:10px;
+    padding:10px 14px; font-size:13px;
+  }
+  .history-row .hr-date{ color:var(--ink-soft); }
+  .history-row .hr-score{ font-weight:700; }
+ 
   /* ---------- Quiz screen ---------- */
-  .quiz-shell{ padding:32px 24px 100px; }
+  .quiz-shell{ padding:20px 24px 100px; }
+ 
+  .quiz-topbar{
+    display:flex; justify-content:flex-start; margin-bottom:18px;
+  }
  
   .progress-track{
     height:6px; background:var(--bg-alt); border-radius:999px; overflow:hidden;
@@ -202,33 +227,15 @@
     cursor:pointer; display:flex; gap:14px; align-items:flex-start;
     transition:border-color .15s ease, background .15s ease, transform .1s ease;
   }
-  .choice:hover:not(:disabled){ border-color:var(--blue); background:var(--blue-soft); }
-  .choice:active:not(:disabled){ transform:scale(0.99); }
+  .choice:hover{ border-color:var(--blue); background:var(--blue-soft); }
+  .choice:active{ transform:scale(0.99); }
   .choice .idx{
     flex:0 0 auto; width:26px; height:26px; border-radius:50%;
     background:var(--bg-alt); color:var(--ink-soft);
     font-size:13px; font-weight:700; display:flex; align-items:center; justify-content:center;
   }
-  .choice.correct{ border-color:var(--green); background:var(--green-soft); }
-  .choice.correct .idx{ background:var(--green); color:#fff; }
-  .choice.wrong{ border-color:var(--red); background:var(--red-soft); }
-  .choice.wrong .idx{ background:var(--red); color:#fff; }
-  .choice:disabled{ cursor:default; }
-  .choice:disabled:not(.correct):not(.wrong){ opacity:.55; }
- 
-  .feedback{
-    display:none; margin-top:22px; padding:20px 22px;
-    border-radius:var(--radius-md); background:var(--bg-alt);
-    font-size:15px; line-height:1.7; color:var(--ink-soft);
-  }
-  .feedback.show{ display:block; animation:fadeIn .3s ease; }
-  .feedback b{ color:var(--ink); }
-  .feedback .fb-title{
-    display:inline-flex; align-items:center; gap:8px;
-    font-weight:700; font-size:15px; margin-bottom:8px;
-  }
-  .feedback.correct .fb-title{ color:var(--green); }
-  .feedback.wrong .fb-title{ color:var(--red); }
+  .choice.selected{ border-color:var(--blue); background:var(--blue-soft); }
+  .choice.selected .idx{ background:var(--blue); color:#fff; }
  
   .quiz-footer{
     display:flex; justify-content:flex-end; margin-top:26px;
@@ -272,6 +279,8 @@
     border:1px solid var(--line); border-radius:var(--radius-md);
     padding:20px 22px; margin-bottom:14px;
   }
+  .review-item.wrong{ border-color:rgba(224,52,42,0.35); }
+  .review-item.correct{ border-color:rgba(31,157,85,0.3); }
   .review-item .rt{ font-size:12px; color:var(--ink-soft); margin-bottom:6px; display:flex; gap:8px; align-items:center;}
   .review-item .term{ font-size:17px; font-weight:700; margin-bottom:8px; }
   .review-item .meaning{ font-size:14.5px; line-height:1.65; color:var(--ink); margin-bottom:10px; }
@@ -280,6 +289,11 @@
     background:var(--bg-alt); border-radius:10px; padding:12px 14px;
   }
   .review-item .your-answer{ font-size:13.5px; color:var(--red); margin-bottom:8px; }
+  .result-tag{
+    font-size:11px; font-weight:700; padding:4px 10px; border-radius:999px;
+  }
+  .result-tag.correct{ background:var(--green-soft); color:var(--green); }
+  .result-tag.wrong{ background:var(--red-soft); color:var(--red); }
  
   .result-actions{ display:flex; gap:14px; justify-content:center; flex-wrap:wrap; padding-bottom:70px; }
  
@@ -310,18 +324,24 @@
     <p>障害対応・物理配線・SLAまで。先輩が当たり前のように使う用語を、4択クイズでテンポよく習得しましょう。</p>
  
     <div class="spec-row">
-      <div class="spec-chip">問題数 <b>120問</b></div>
+      <div class="spec-chip">問題数 <b>最大120問</b></div>
       <div class="spec-chip">形式 <b>4択</b></div>
       <div class="spec-chip">進捗 <b>自動保存</b></div>
-    </div>
- 
-    <div class="cta-row">
-      <button class="btn btn-primary" id="btnStart">クイズをはじめる</button>
-      <button class="btn btn-secondary" id="btnReviewWeak" style="display:none;">苦手だけ復習する</button>
     </div>
   </div>
  
   <div class="wrap">
+    <div class="panel">
+      <h3>出題数を選ぶ</h3>
+      <div class="count-chips" id="countChips"></div>
+      <p class="count-hint">10問単位で選べます（最大120問）</p>
+    </div>
+ 
+    <div class="cta-row" style="margin-bottom:40px;">
+      <button class="btn btn-primary" id="btnStart">クイズをはじめる</button>
+      <button class="btn btn-secondary" id="btnReviewWeak" style="display:none;">苦手だけ復習する</button>
+    </div>
+ 
     <div class="panel" id="statsPanel" style="display:none;">
       <h3>これまでの記録</h3>
       <div class="panel-grid">
@@ -330,6 +350,7 @@
         <div class="panel-stat"><b id="statLast">0%</b><span>前回の正答率</span></div>
       </div>
       <div class="weak-list" id="weakList"></div>
+      <div class="history-list" id="historyList"></div>
     </div>
   </div>
 </section>
@@ -337,6 +358,10 @@
 <!-- ============ QUIZ SCREEN ============ -->
 <section class="screen" id="screen-quiz">
   <div class="wrap quiz-shell">
+    <div class="quiz-topbar">
+      <button class="btn btn-ghost small" id="btnHomeFromQuiz">← ホームに戻る</button>
+    </div>
+ 
     <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
     <div class="quiz-meta">
       <span>問題 <span class="count" id="qCount">1</span> / <span id="qTotal">120</span></span>
@@ -347,11 +372,6 @@
     <div class="question-card"><p id="qPrompt">用語がここに入ります</p></div>
  
     <div class="choices" id="choices"></div>
- 
-    <div class="feedback" id="feedback">
-      <div class="fb-title" id="fbTitle"></div>
-      <div id="fbBody"></div>
-    </div>
  
     <div class="quiz-footer">
       <button class="btn btn-primary" id="btnNext" disabled>次の問題へ</button>
@@ -374,7 +394,7 @@
     <div class="cat-breakdown" id="catBreakdown"></div>
  
     <div class="review-section">
-      <h3>間違えた問題の復習</h3>
+      <h3>解答結果一覧</h3>
       <div id="reviewList"></div>
     </div>
  
@@ -386,12 +406,14 @@
   </div>
 </section>
  
-<footer>社内学習用クイズアプリ &middot; 全120問はいつでもリセットできます</footer>
+<footer>社内学習用クイズアプリ &middot; 出題数はいつでも選び直せます</footer>
  
 <script>
 const ALL_QUESTIONS = [{"id": 1, "type": "term2meaning", "category": "SLA・契約", "term": "エスカレーション", "meaning": "自分の手に負えない障害が起きたとき、上の先輩や上司、専門チームに「助けてください！」と報告すること。", "beginner": "「これ以上は自分じゃ無理です！班長、お願いします！」と速やかにバトンを上に繋ぐ、超重要な危機管理行動。", "prompt": "エスカレーション", "choices": ["システムログ。機器やサーバが出力する動作記録。障害解析の重要な手がかり。", "災害や大規模障害発生時でも業務を継続するための計画。", "自分の手に負えない障害が起きたとき、上の先輩や上司、専門チームに「助けてください！」と報告すること。", "ラックに搭載する機器の高さを表す単位。1U＝約44.45mm。"], "answerIndex": 2}, {"id": 2, "type": "term2meaning", "category": "設計・運用", "term": "ワークアラウンド", "meaning": "根本解決ではないが、とりあえずシステムを動かし続けるための「暫定対処（応急処置）」。", "beginner": "配管から水漏れしたとき、元栓を直すのではなく、とりあえず「テープをグルグル巻きにして凌ぐ」技。", "prompt": "ワークアラウンド", "choices": ["根本解決ではないが、とりあえずシステムを動かし続けるための「暫定対処（応急処置）」。", "管理専用の別回線（アウトオブバンド）経由で、対象機器にPingを打つ疎通確認。", "障害検知時に、上位や対向機器に障害を伝えるため意図的にリンクを落とす機能。", "ポートが物理的にUP（リンク確立）しており、かつ管理上も有効（Enable）な正常状態。"], "answerIndex": 0}, {"id": 3, "type": "term2meaning", "category": "物理・配線", "term": "フリアク", "meaning": "フリーアクセス（フロア）の略。床下に配線スペースがある二重床構造。", "beginner": "床の下にケーブルを通せる「上げ底の床」。データセンターでは標準装備。", "prompt": "フリアク", "choices": ["ポートが物理的にUP（リンク確立）しており、かつ管理上も有効（Enable）な正常状態。", "フリーアクセス（フロア）の略。床下に配線スペースがある二重床構造。", "1芯の光ファイバーを送受信で共用する通信方式。波長を分けて双方向通信を行う。", "「最大限の努力はするけど、品質の保証はしないよ」という提供方式。一般的な家庭用ネット回線。"], "answerIndex": 1}, {"id": 4, "type": "meaning2term", "category": "設計・運用", "term": "サービスバックアウト", "meaning": "作業時に意図しなかった障害・不具合が発生した際、サービス正常復旧するよう早急に回避させること。", "beginner": "ネットワーク機器の設定変更後に通信断が発生したため、新設定を取り消して作業前の設定へ戻し、サービスを復旧させる対応。", "prompt": "作業時に意図しなかった障害・不具合が発生した際、サービス正常復旧するよう早急に回避させること。", "choices": ["サービスバックアウト", "RRH", "アラームマスク", "デフォルトゲートウェイ"], "answerIndex": 0}, {"id": 5, "type": "meaning2term", "category": "物理・配線", "term": "E-BTS", "meaning": "屋外用の基地局装置。電柱やビル屋上に設置される携帯電話の電波送受信設備。", "beginner": "街中で見かける携帯の基地局ボックス。ここから電波が飛んでスマホに届く。", "prompt": "屋外用の基地局装置。電柱やビル屋上に設置される携帯電話の電波送受信設備。", "choices": ["パッチパネル", "E-BTS", "線密（せんみつ）/ 配線整理", "msec"], "answerIndex": 1}, {"id": 6, "type": "meaning2term", "category": "設計・運用", "term": "バックアウト", "meaning": "切り戻しとほぼ同義。メンテナンスや更新作業で問題が発生した際に、元の状態に戻すこと。", "beginner": "「やっぱり前のバージョンに戻そう」という撤退作戦。深夜作業の命綱。", "prompt": "切り戻しとほぼ同義。メンテナンスや更新作業で問題が発生した際に、元の状態に戻すこと。", "choices": ["eNB", "バックアウト", "ケーブルストレス", "両系運用"], "answerIndex": 1}, {"id": 7, "type": "term2meaning", "category": "物理・配線", "term": "光モジュール", "meaning": "スイッチやルーターに装着し、電気信号と光信号を相互変換する装置（SFP、QSFPなど）。", "beginner": "スイッチと光ファイバーを接続するための通信インターフェース部品。電気信号を光信号へ変換して送受信する。", "prompt": "光モジュール", "choices": ["電気の流れる量。アンペア（A）で表す。", "スイッチやルーターに装着し、電気信号と光信号を相互変換する装置（SFP、QSFPなど）。", "difference（差分）の略。設定ファイルなどの変更前後の違いを比較・表示すること。", "光信号（光ファイバ）と電気信号（LANケーブル）を互いに変換する、手のひらサイズの四角い箱。"], "answerIndex": 1}, {"id": 8, "type": "meaning2term", "category": "構造・制御", "term": "Flush", "meaning": "スイッチのFDB（MACアドレステーブル）をクリアして、学習内容を初期化すること。", "beginner": "スイッチが保持しているMACアドレスの学習情報をすべて削除し、受信フレームをもとに接続先を再学習させる動作。", "prompt": "スイッチのFDB（MACアドレステーブル）をクリアして、学習内容を初期化すること。", "choices": ["RPO", "シングルファイバ", "Flush", "エージングタイム"], "answerIndex": 2}, {"id": 9, "type": "meaning2term", "category": "構造・制御", "term": "スタンドアローン", "meaning": "他の機器と連携せず、単独で動作している状態。または単体で完結する機器構成。", "beginner": "チームを組まず「一匹狼」で動いている状態。冗長化されていないことも多い。", "prompt": "他の機器と連携せず、単独で動作している状態。または単体で完結する機器構成。", "choices": ["MTTR", "SLA", "保守ベンダ", "スタンドアローン"], "answerIndex": 3}, {"id": 10, "type": "meaning2term", "category": "構造・制御", "term": "eNB", "meaning": "e-NodeB（イーノードビー）の略。LTE（4G）の基地局のこと。5GではgNBと呼ぶ。", "beginner": "4Gの携帯基地局の正式名称。5Gになると「gNB」に名前が変わる。", "prompt": "e-NodeB（イーノードビー）の略。LTE（4G）の基地局のこと。5GではgNBと呼ぶ。", "choices": ["eNB", "片通（かたづう）", "バースト", "RCA"], "answerIndex": 0}, {"id": 11, "type": "term2meaning", "category": "構造・制御", "term": "ラストワンマイル", "meaning": "最寄りの基地局・局舎から、ユーザーの自宅（終端）までの最後の区間のこと。", "beginner": "宅配便でいう「配送センターから、あなたのお家の玄関までの最後の配達路」。ここが一番コストがかかる。", "prompt": "ラストワンマイル", "choices": ["特定のアラーム（警告）を一時的に無視・非表示にする設定。メンテナンス中に使用。", "最寄りの基地局・局舎から、ユーザーの自宅（終端）までの最後の区間のこと。", "パケットの到着時間がばらつく現象。音声や映像品質に影響を与える。", "回線業者の装置を通さず、純粋に光ファイバの芯線だけをダイレクトに直借りする贅沢な構成。"], "answerIndex": 1}, {"id": 12, "type": "term2meaning", "category": "物理・配線", "term": "シングル構成", "meaning": "冗長化されていない単一構成。予備設備を持たない。", "beginner": "1台のルーターや1本の回線だけで構成されており、故障時の代替経路がない状態。", "prompt": "シングル構成", "choices": ["冗長化されていない単一構成。予備設備を持たない。", "Signal Detect（光信号受光状態）ではあるが、ポートは正常にリンクアップしていない状態。管理上は有効。", "エンドユーザーの端末（PC等）を接続するためのスイッチのポート。", "冗長構成の一方の系統が停止し、残る1系統のみでサービスを継続している状態。"], "answerIndex": 0}, {"id": 13, "type": "term2meaning", "category": "構造・制御", "term": "FAN", "meaning": "スイッチやルーター内部の熱を排出し、機器を適切な温度で動作させるための冷却装置。", "beginner": "高負荷で稼働するスイッチの熱を逃がし、装置がオーバーヒートしないようにするための冷却機構。", "prompt": "FAN", "choices": ["同じMACアドレスが異なるポートで検出され、FDBが更新される現象。", "スイッチやルーター内部の熱を排出し、機器を適切な温度で動作させるための冷却装置。", "ルーター等によって区切られた、同じIPアドレスのルールを持つ「1つのグループ（部屋）」。", "製品やサービスがメーカーから顧客に届くまでの取引経路・流通ルートのこと。誰が誰に売るかの関係性。"], "answerIndex": 1}, {"id": 14, "type": "meaning2term", "category": "設計・運用", "term": "冗長化（じょうちょうか）", "meaning": "壊れたときのために、機器や回線をあらかじめ2系統以上用意しておくこと。", "beginner": "「メインの道が崖崩れになってもいいように、あらかじめ回り道（迂回路）をセットで作っておく」思想。", "prompt": "壊れたときのために、機器や回線をあらかじめ2系統以上用意しておくこと。", "choices": ["冗長化（じょうちょうか）", "コールドスタンバイ", "C-RAN", "筐体冗長"], "answerIndex": 0}, {"id": 15, "type": "meaning2term", "category": "物理・配線", "term": "ラインカード（Linecard）", "meaning": "実際にデータの送受信を行うインターフェースカード（基板）。ポートが並んでいる部分。", "beginner": "機器の「手足」。LANケーブルや光ファイバを挿すポートがズラッと並んでいるカード。", "prompt": "実際にデータの送受信を行うインターフェースカード（基板）。ポートが並んでいる部分。", "choices": ["ラインカード（Linecard）", "RCA", "保守ベンダ", "ユニット（U）"], "answerIndex": 0}, {"id": 16, "type": "term2meaning", "category": "構造・制御", "term": "ルーター跨ぎ（またぎ）", "meaning": "通信が別のセグメント（異なるネットワークグループ）を超えて向こう側へ行くこと。", "beginner": "自分の市（ローカルな部屋）から、別の市（外の世界）へ移動すること。ルーティングが必要。", "prompt": "ルーター跨ぎ（またぎ）", "choices": ["通信が別のセグメント（異なるネットワークグループ）を超えて向こう側へ行くこと。", "RX（Receive）    対向装置から送られてきたデータを受け取る受信口。", "データ（パケット）の一部が途中で行方不明になり相手に届かないこと。", "壊れたときのために、機器や回線をあらかじめ2系統以上用意しておくこと。"], "answerIndex": 0}, {"id": 17, "type": "term2meaning", "category": "構造・制御", "term": "LLDP", "meaning": "Link Layer Discovery Protocolの略。隣接機器の情報を自動で収集するプロトコル。", "beginner": "「お隣さんは誰？」を自動で調べて教えてくれる便利な仕組み。CLIコマンドでもよく利用する。配線図作成に役立つ。", "prompt": "LLDP", "choices": ["シングルモード（SM）とマルチモード（MM）が代表的。距離や用途で使い分ける。", "システムが「壊れることなく、いつでも使える状態を維持できている度合い」。", "通信が切れていないか確認するため、定期的にお互い小さなデータを送り合う仕組み。", "Link Layer Discovery Protocolの略。隣接機器の情報を自動で収集するプロトコル。"], "answerIndex": 3}, {"id": 18, "type": "meaning2term", "category": "障害・品質", "term": "ハザーダス状態", "meaning": "冗長構成の一方の系統が故障・停止し、残る1系統のみでサービスを継続している警戒状態。残存系統に障害が発生するとサービス停止に直結する。", "beginner": "主系または従系が故障しており、シングル状態で通信を継続している状態。現在は正常に通信できているが、残る系統が故障すると即サービス断となる。", "prompt": "冗長構成の一方の系統が故障・停止し、残る1系統のみでサービスを継続している警戒状態。残存系統に障害が発生するとサービス停止に直結する。", "choices": ["商流", "セル", "ハザーダス状態", "SD/Disable"], "answerIndex": 2}, {"id": 19, "type": "meaning2term", "category": "SLA・契約", "term": "ベストエフォート", "meaning": "「最大限の努力はするけど、品質の保証はしないよ」という提供方式。一般的な家庭用ネット回線。", "beginner": "「渋滞がなければ30分で着くように頑張るけど、混んでたら遅れるから怒らないでね」というスタンス。", "prompt": "「最大限の努力はするけど、品質の保証はしないよ」という提供方式。一般的な家庭用ネット回線。", "choices": ["フラッピング", "LLDP", "ベストエフォート", "一次対応（いちじたいおう）"], "answerIndex": 2}, {"id": 20, "type": "meaning2term", "category": "設計・運用", "term": "インシデント", "meaning": "システムが正常に使えなくなっている（またはその原因となる）困った事態・イベント。", "beginner": "「事故の一歩手前」や「実際に起きているトラブル」。これを解決することが運用保守の仕事。", "prompt": "システムが正常に使えなくなっている（またはその原因となる）困った事態・イベント。", "choices": ["切り戻し（きりもどし）", "インシデント", "Down/Disable", "疎通確認（そつうかくにん）"], "answerIndex": 1}, {"id": 21, "type": "term2meaning", "category": "構造・制御", "term": "L3", "meaning": "Layer 3（レイヤー3）の略。ネットワーク層。IPアドレスでルーティングする層。", "beginner": "「IP住所」を使って、異なるネットワーク間でも通信できるようにする層。", "prompt": "L3", "choices": ["Signal Detect（光信号受光状態）ではあるが、管理上は無効（Disable）でポートは使用不可。", "信号が伝送路を通過する際に減衰して弱くなる現象。", "携帯電話の電波を送受信するアンテナ設備とその周辺機器一式。鉄塔やビル屋上にある。", "Layer 3（レイヤー3）の略。ネットワーク層。IPアドレスでルーティングする層。"], "answerIndex": 3}, {"id": 22, "type": "meaning2term", "category": "構造・制御", "term": "コアSW", "meaning": "ネットワークの中心に配置される大容量スイッチ。全体のトラフィックを集約する。", "beginner": "ネットワークの「心臓部」にある超高性能スイッチ。複数のエッジスイッチからの通信を集約し、ネットワーク全体のトラフィックを中継する基幹スイッチ。障害発生時の影響範囲が大きい。", "prompt": "ネットワークの中心に配置される大容量スイッチ。全体のトラフィックを集約する。", "choices": ["err-disable", "計画作業", "LAG", "コアSW"], "answerIndex": 3}, {"id": 23, "type": "term2meaning", "category": "構造・制御", "term": "オンプレ", "meaning": "オンプレミス（On-Premises）の略。自社でサーバやネットワーク機器を保有・運用する形態。", "beginner": "自分の家（自社）にサーバを置く方式。クラウドの反対。管理は大変だが自由度が高い。", "prompt": "オンプレ", "choices": ["ポートが物理的にUP（リンク確立）しており、かつ管理上も有効（Enable）な正常状態。", "オンプレミス（On-Premises）の略。自社でサーバやネットワーク機器を保有・運用する形態。", "パケットの到着時間がばらつく現象。音声や映像品質に影響を与える。", "Baseband Unitの略。基地局でデジタル信号を処理する装置。RRHとセットで使う。"], "answerIndex": 1}, {"id": 24, "type": "term2meaning", "category": "障害・品質", "term": "死活監視（しかつかんし）", "meaning": "対象のサーバーやネットワーク機器が「生きてるか死んでるか」を24時間体制で見守ること。", "beginner": "定期的に「生きてる？」と声をかけ（Ping送信）、返事があるか確認する基本の看病。", "prompt": "死活監視（しかつかんし）", "choices": ["光コネクタの一種（SC/APCコネクタ）の現場での俗称。緑色が目印。", "ネットワークの中心に配置される大容量スイッチ。全体のトラフィックを集約する。", "対象のサーバーやネットワーク機器が「生きてるか死んでるか」を24時間体制で見守ること。", "ポートが物理的にDOWN（リンク断）だが、管理上は有効（Enable）になっている状態。"], "answerIndex": 2}, {"id": 25, "type": "meaning2term", "category": "設計・運用", "term": "Ins", "meaning": "In Serviceの略。機器やポートがサービス中（稼働中）の状態。", "beginner": "「営業中」の状態。正常に通信を処理している。", "prompt": "In Serviceの略。機器やポートがサービス中（稼働中）の状態。", "choices": ["バックボーン（基幹回線）", "アラームマスク", "Ins", "SD/Enable"], "answerIndex": 2}, {"id": 26, "type": "term2meaning", "category": "物理・配線", "term": "ホットスワップ", "meaning": "電源を入れたまま（システムを稼働させたまま）パーツやハードディスクを安全に抜き差しすること。", "beginner": "走っている車のタイヤを、車を止めずにその場で新品に交換するようなハイテク技術。", "prompt": "ホットスワップ", "choices": ["機器やシステムを新しいものに入れ替える作業。または通信経路を別のルートに変えること。", "電源を入れたまま（システムを稼働させたまま）パーツやハードディスクを安全に抜き差しすること。", "障害検知後、まずはこれ以上被害が広がらないように、再起動や回線切替などを行う「応急処置」のこと。", "主系・予備系の両方が停止し、サービス提供できない状態。"], "answerIndex": 1}, {"id": 27, "type": "meaning2term", "category": "設計・運用", "term": "オンスケ", "meaning": "オンスケジュールの略。プロジェクトや作業が予定通りに進んでいる状態。", "beginner": "「進捗どうですか？」「オンスケです！」は現場で最も安心できる返答。", "prompt": "オンスケジュールの略。プロジェクトや作業が予定通りに進んでいる状態。", "choices": ["建設", "ピコセル", "オンスケ", "スタンドアローン"], "answerIndex": 2}, {"id": 28, "type": "term2meaning", "category": "SLA・契約", "term": "MTBF", "meaning": "平均故障間隔。システムが「一度直ってから、次に壊れるまでどれくらい長持ちしたか」の平均値。", "beginner": "「一度風邪が治ってから、次の風邪をひくまでに健康でいられた期間」。長いほど健康で頑丈なシステム。", "prompt": "MTBF", "choices": ["冗長構成の一方の系統が停止し、残る1系統のみでサービスを継続している状態。", "根本原因分析。表面的なエラーだけでなく「なぜそのミスが起きたか、体制や手順に問題はないか」まで深掘りすること。", "平均故障間隔。システムが「一度直ってから、次に壊れるまでどれくらい長持ちしたか」の平均値。", "通信が一瞬ではなく、ある程度の時間（数分〜数時間）継続して途切れ続ける障害。"], "answerIndex": 2}, {"id": 29, "type": "term2meaning", "category": "SLA・契約", "term": "稼働率（かどうりつ）", "meaning": "システムが1年のうち、どれだけ「正常に動き続けていたか」の割合。99.99%（フォーナイン）等と表す。", "beginner": "1年間のうち、病気で寝込まずに元気に学校（仕事）に行けた日数の割合のようなもの。", "prompt": "稼働率（かどうりつ）", "choices": ["システムが1年のうち、どれだけ「正常に動き続けていたか」の割合。99.99%（フォーナイン）等と表す。", "インターネット上の事業者が提供するサーバやサービスを利用する形態。AWS、Azure等。", "現地調査の略。データセンターや顧客の現場に直接行って、物理的な環境を確認すること。", "オンスケジュールの略。プロジェクトや作業が予定通りに進んでいる状態。"], "answerIndex": 0}, {"id": 30, "type": "term2meaning", "category": "設計・運用", "term": "疎通確認（そつうかくにん）", "meaning": "ネットワークがA地点からB地点まで「ちゃんと繋がっているか」を実際にデータを投げて確認する作業。", "beginner": "「おーい！聞こえるかー！」と叫んで（Pingを打って）、「聞こえるよー！」と返事が返ってくるか確かめる。", "prompt": "疎通確認（そつうかくにん）", "choices": ["ネットワークがA地点からB地点まで「ちゃんと繋がっているか」を実際にデータを投げて確認する作業。", "事故を起こした際、お客様向けに「原因、影響範囲、今後の対策」をまとめて提出する、最も胃が痛い書類。", "新規に回線や設備を敷設・構築すること。工事を伴う物理的な準備作業。", "Ethernet（イーサネット）の略。LANケーブルで繋ぐ有線ネットワークの規格・ポート名。"], "answerIndex": 0}, {"id": 31, "type": "meaning2term", "category": "構造・制御", "term": "レイヤ", "meaning": "ネットワークの階層構造。OSI参照モデルで7層、TCP/IPモデルで4層に分かれる。", "beginner": "通信を「階層」に分けて整理したもの。L1が物理層、L7がアプリケーション層。", "prompt": "ネットワークの階層構造。OSI参照モデルで7層、TCP/IPモデルで4層に分かれる。", "choices": ["LAG", "レイヤ", "L3", "ラッキング"], "answerIndex": 1}, {"id": 32, "type": "term2meaning", "category": "構造・制御", "term": "クラウド", "meaning": "インターネット上の事業者が提供するサーバやサービスを利用する形態。AWS、Azure等。", "beginner": "他人の家（データセンター）にサーバを借りる方式。手軽だが、利用料がかかる。", "prompt": "クラウド", "choices": ["システムが正常に使えなくなっている（またはその原因となる）困った事態・イベント。", "監視の設定が甘く、重要じゃない通知が毎日数千件も飛びすぎて、本当にヤバい通知を見落とす状態。", "目標復旧時間。障害発生から「何時間（何分）以内にシステムを元の状態に戻すか」という設計上の目標。", "インターネット上の事業者が提供するサーバやサービスを利用する形態。AWS、Azure等。"], "answerIndex": 3}, {"id": 33, "type": "meaning2term", "category": "構造・制御", "term": "アクセスポート", "meaning": "エンドユーザーの端末（PC等）を接続するためのスイッチのポート。", "beginner": "社員のパソコンを繋ぐ「一般用の差込口」。VLANが設定されていることが多い。", "prompt": "エンドユーザーの端末（PC等）を接続するためのスイッチのポート。", "choices": ["アクセスポート", "Ins", "光パワーメーター", "ラストワンマイル"], "answerIndex": 0}, {"id": 34, "type": "term2meaning", "category": "物理・配線", "term": "芯線対照（しんせんたいしょう）", "meaning": "大量にある光ファイバの中から、目的の1本がどれなのかを、特殊な光（チェッカー）を当てて探す作業。", "beginner": "「この赤い光がチカチカしてるのが、東京本社に繋がってる105番の線だ！」と特定する宝探し。", "prompt": "芯線対照（しんせんたいしょう）", "choices": ["大量にある光ファイバの中から、目的の1本がどれなのかを、特殊な光（チェッカー）を当てて探す作業。", "ベストエフォートの真逆。高額な代わりに「あなた専用の車線を絶対にキープします」という企業向け契約。", "ダークファイバに対して、実際にレーザー光を通して通信が利用可能になっている回線。", "上位のスイッチやルーターと接続するためのポート。大容量・高速なことが多い。"], "answerIndex": 0}, {"id": 35, "type": "meaning2term", "category": "設計・運用", "term": "アラートオオカミ", "meaning": "監視の設定が甘く、重要じゃない通知が毎日数千件も飛びすぎて、本当にヤバい通知を見落とす状態。", "beginner": "「オオカミが来たぞ！」と毎日嘘をつく少年のせいで、本当にオオカミ（深刻な障害）が来たときに誰も気づかない状態。", "prompt": "監視の設定が甘く、重要じゃない通知が毎日数千件も飛びすぎて、本当にヤバい通知を見落とす状態。", "choices": ["ダウンリンク", "diff", "L3", "アラートオオカミ"], "answerIndex": 3}, {"id": 36, "type": "term2meaning", "category": "設計・運用", "term": "切り戻し（きりもどし）", "meaning": "夜間作業などのメンテナンスで、新しい設定や切替に失敗した際、「元の正常な状態に戻す」作業。", "beginner": "「ダメだ、新システムが繋がらない！タイムリミット（朝5時）までに元の状態に戻すぞ！」という冷や汗ものの作業。", "prompt": "切り戻し（きりもどし）", "choices": ["障害検知時に、上位や対向機器に障害を伝えるため意図的にリンクを落とす機能。", "夜間作業などのメンテナンスで、新しい設定や切替に失敗した際、「元の正常な状態に戻す」作業。", "上位のスイッチやルーターと接続するためのポート。大容量・高速なことが多い。", "すでに地面や電柱に敷設されている光ファイバのうち、まだ使われておらず光が通っていない予備回線。"], "answerIndex": 1}, {"id": 37, "type": "meaning2term", "category": "物理・配線", "term": "局舎（きょくしゃ）", "meaning": "キャリア（NTT等）の通信機器や光ファイバがギッシリ詰まった専用の建物。", "beginner": "街中にある「データの超大型乗り換え駅・コントロールセンター」。", "prompt": "キャリア（NTT等）の通信機器や光ファイバがギッシリ詰まった専用の建物。", "choices": ["ダウンタイム", "光ケーブルの種類", "局舎（きょくしゃ）", "ホットスタンバイ"], "answerIndex": 2}, {"id": 38, "type": "meaning2term", "category": "物理・配線", "term": "基地局", "meaning": "携帯電話の電波を送受信するアンテナ設備とその周辺機器一式。鉄塔やビル屋上にある。", "beginner": "スマホの電波をキャッチして繋いでくれる「携帯の中継所」。身近なインフラ設備。", "prompt": "携帯電話の電波を送受信するアンテナ設備とその周辺機器一式。鉄塔やビル屋上にある。", "choices": ["基地局", "FAN", "商流", "サイレント障害"], "answerIndex": 0}, {"id": 39, "type": "meaning2term", "category": "物理・配線", "term": "ギガビットイーサ", "meaning": "1Gbpsの通信速度に対応したEthernet規格。", "beginner": "スイッチやルーター間を毎秒1ギガビットで通信できる標準的なネットワーク接続方式。", "prompt": "1Gbpsの通信速度に対応したEthernet規格。", "choices": ["ギガビットイーサ", "Station move", "Ous", "アラームマスク"], "answerIndex": 0}, {"id": 40, "type": "meaning2term", "category": "障害・品質", "term": "電流", "meaning": "電気の流れる量。アンペア（A）で表す。", "beginner": "通信機器を動作させるために電源から供給される電気の流れ。", "prompt": "電気の流れる量。アンペア（A）で表す。", "choices": ["パケロス", "Reboot", "FDB", "電流"], "answerIndex": 3}, {"id": 41, "type": "meaning2term", "category": "物理・配線", "term": "架（が）", "meaning": "通信設備や伝送装置、回線などを収容・管理する単位。局舎や通信室内で設備を搭載するラックやフレームを指すことが多い。", "beginner": "ルーター、スイッチ、伝送装置などを収容する「設備ラック」。複数の通信機器を整理して設置するための土台となる設備。", "prompt": "通信設備や伝送装置、回線などを収容・管理する単位。局舎や通信室内で設備を搭載するラックやフレームを指すことが多い。", "choices": ["コールドスタンバイ", "アップリンクポート", "架（が）", "レイヤ"], "answerIndex": 2}, {"id": 42, "type": "term2meaning", "category": "SLA・契約", "term": "一次対応（いちじたいおう）", "meaning": "障害検知後、まずはこれ以上被害が広がらないように、再起動や回線切替などを行う「応急処置」のこと。", "beginner": "火事が起きたときに、原因調査（二次対応）をする前に、まずは「目の前の火に消火器をぶっかける」行動。", "prompt": "一次対応（いちじたいおう）", "choices": ["ネットワークの末端（エッジ）に配置されるスイッチ。エンドユーザーを収容する。", "障害検知後、まずはこれ以上被害が広がらないように、再起動や回線切替などを行う「応急処置」のこと。", "他事業者から借用している回線に対して実施する開通・変更・保守作業", "システムが「壊れることなく、いつでも使える状態を維持できている度合い」。"], "answerIndex": 1}, {"id": 43, "type": "term2meaning", "category": "障害・品質", "term": "輻輳（ふくそう）", "meaning": "アクセスが集中しすぎて、回線や機器がパンク（大渋滞）している状態。", "beginner": "「あけおめLINE」や「人気ライブのチケット争奪戦」でネットが繋がらなくなる状態。", "prompt": "輻輳（ふくそう）", "choices": ["アクセスが集中しすぎて、回線や機器がパンク（大渋滞）している状態。", "他の機器と連携せず、単独で動作している状態。または単体で完結する機器構成。", "平均修復時間。障害が起きてから、「どれだけ早く直せたか」の平均値。運用の腕の見せ所。", "新規に回線や設備を敷設・構築すること。工事を伴う物理的な準備作業。"], "answerIndex": 0}, {"id": 44, "type": "term2meaning", "category": "物理・配線", "term": "ラッキング", "meaning": "19インチラックという専用の棚に、重いサーバーやルーターをネジで固定して設置する作業。", "beginner": "インフラエンジニアの基礎体力が試される、物理的な機器組み立て・設置労働。", "prompt": "ラッキング", "choices": ["19インチラックという専用の棚に、重いサーバーやルーターをネジで固定して設置する作業。", "オンプレミス（On-Premises）の略。自社でサーバやネットワーク機器を保有・運用する形態。", "他の機器と連携せず、単独で動作している状態。または単体で完結する機器構成。", "ネットワーク内でデータが無限にぐるぐる回り続け、帯域を食いつぶしてパンクさせる事故。"], "answerIndex": 0}, {"id": 45, "type": "term2meaning", "category": "障害・品質", "term": "パケロス", "meaning": "データ（パケット）の一部が途中で行方不明になり相手に届かないこと。", "beginner": "郵便で10通手紙を送ったのに1通だけ紛失した状態。ネットが重い、動画がカクつく原因。", "prompt": "パケロス", "choices": ["予備機の電源を入れた状態で待機させる構成。すぐ切り替えられるが電気代がかかる。", "ネットワーク機器の死活監視を行う専用サーバ群。定期的にPingを送って生存確認する。", "データ（パケット）の一部が途中で行方不明になり相手に届かないこと。", "送信用と受信用で複数芯の光ファイバーを使用する通信方式。"], "answerIndex": 2}, {"id": 46, "type": "meaning2term", "category": "物理・配線", "term": "光ケーブルの種類", "meaning": "シングルモード（SM）とマルチモード（MM）が代表的。距離や用途で使い分ける。", "beginner": "長距離用の細い光ファイバ（SM）と、短距離用の太い光ファイバ（MM）。色で見分ける。", "prompt": "シングルモード（SM）とマルチモード（MM）が代表的。距離や用途で使い分ける。", "choices": ["光ケーブルの種類", "光モジュール", "筐体冗長", "ルーター跨ぎ（またぎ）"], "answerIndex": 0}, {"id": 47, "type": "term2meaning", "category": "物理・配線", "term": "クレトップ", "meaning": "光コネクタ端面を清掃するための光ファイバー専用クリーナー。", "beginner": "光ファイバーの接続部に付着した汚れを除去し、通信品質を維持するための清掃ツール。", "prompt": "クレトップ", "choices": ["LAGを構成する複数回線のうち、一部が障害で減ってしまった状態。帯域が減少する。", "本番と全く同じ構成で作られた、最終テスト用の検証環境。", "Ethernet通信用のLANケーブル規格の一つ。1Gbps通信に対応。", "光コネクタ端面を清掃するための光ファイバー専用クリーナー。"], "answerIndex": 3}, {"id": 48, "type": "term2meaning", "category": "障害・品質", "term": "両系断", "meaning": "主系・予備系の両方が停止し、サービス提供できない状態。", "beginner": "すべての通信経路が断となり、サービスが停止している状態。", "prompt": "両系断", "choices": ["ネットワークの接続形態・構成図。どの機器がどう繋がっているかを表す。", "行き（リクエスト）は繋がるが、帰り（レスポンス）の通信が戻ってこない現象。", "主系・予備系の両方が停止し、サービス提供できない状態。", "予備機の電源を入れた状態で待機させる構成。すぐ切り替えられるが電気代がかかる。"], "answerIndex": 2}, {"id": 49, "type": "meaning2term", "category": "構造・制御", "term": "FDB", "meaning": "Forwarding DataBaseの略。スイッチが学習したMACアドレスと接続ポートの対応表。", "beginner": "スイッチが学習した『MACアドレス → ポート』の対応情報を保持し、適切な転送先を判断するためのテーブル", "prompt": "Forwarding DataBaseの略。スイッチが学習したMACアドレスと接続ポートの対応表。", "choices": ["計画断", "TTL", "FDB", "ケーブルストレス"], "answerIndex": 2}, {"id": 50, "type": "term2meaning", "category": "物理・配線", "term": "パッチパネル", "meaning": "ケーブル配線を整理・中継するための接続盤。LANケーブルや光ファイバーの接続管理に使用する。", "beginner": "通信回線の配線を集約し、接続先を管理しやすくする中継盤。", "prompt": "パッチパネル", "choices": ["行き（リクエスト）は繋がるが、帰り（レスポンス）の通信が戻ってこない現象。", "ラックの裏側のLANケーブルや光ケーブルがスパゲティ状態にならないよう、綺麗に束ねて整理すること。", "ケーブル配線を整理・中継するための接続盤。LANケーブルや光ファイバーの接続管理に使用する。", "主系・予備系の両方が停止し、サービス提供できない状態。"], "answerIndex": 2}, {"id": 51, "type": "term2meaning", "category": "設計・運用", "term": "計画断", "meaning": "メンテナンスや設備更改などのため、事前告知のうえで実施する計画的な通信断。", "beginner": "ルーターや伝送装置の作業のため、あらかじめ決められた時間に回線を停止すること。", "prompt": "計画断", "choices": ["光コネクタ同士を中継接続するジョイント部品。光ファイバを延長する時に使う。", "ネットワークがA地点からB地点まで「ちゃんと繋がっているか」を実際にデータを投げて確認する作業。", "Signal Detect（光信号受光状態）ではあるが、管理上は無効（Disable）でポートは使用不可。", "メンテナンスや設備更改などのため、事前告知のうえで実施する計画的な通信断。"], "answerIndex": 3}, {"id": 52, "type": "term2meaning", "category": "物理・配線", "term": "ユニット（U）", "meaning": "ラックに搭載する機器の高さを表す単位。1U＝約44.45mm。", "beginner": "通信ラック内で機器が占有するスペースの住所やサイズを表す単位。", "prompt": "ユニット（U）", "choices": ["人間が手動で「この通信はあのルーターへ行け」とルートをガチガチに固定して書く設定。", "ラックに搭載する機器の高さを表す単位。1U＝約44.45mm。", "ポートが、高速で「UP（接続）」と「DOWN（切断）」をガチガチと繰り返す異常状態。", "切り戻しとほぼ同義。メンテナンスや更新作業で問題が発生した際に、元の状態に戻すこと。"], "answerIndex": 1}, {"id": 53, "type": "meaning2term", "category": "障害・品質", "term": "レイテンシ", "meaning": "データを送信してから相手に届くまでに発生する遅延時間。", "beginner": "端末から送ったパケットがネットワーク内を通過し、相手装置へ到達するまでの移動時間。", "prompt": "データを送信してから相手に届くまでに発生する遅延時間。", "choices": ["Ous", "outband ping", "ベストエフォート", "レイテンシ"], "answerIndex": 3}, {"id": 54, "type": "term2meaning", "category": "構造・制御", "term": "C-RAN", "meaning": "Centralized RANの略。基地局の機能を集約して、中央のデータセンターに置く構成。", "beginner": "各地の基地局の頭脳を、1ヶ所の司令部に集めて効率化する携帯ネットワークの構成。", "prompt": "C-RAN", "choices": ["Signal Detect（光信号受光状態）ではあるが、ポートは正常にリンクアップしていない状態。管理上は有効。", "管理専用の別回線（アウトオブバンド）経由で、対象機器にPingを打つ疎通確認。", "Ethernet（イーサネット）の略。LANケーブルで繋ぐ有線ネットワークの規格・ポート名。", "Centralized RANの略。基地局の機能を集約して、中央のデータセンターに置く構成。"], "answerIndex": 3}, {"id": 55, "type": "meaning2term", "category": "SLA・契約", "term": "ダウンタイム", "meaning": "障害などでシステムが「完全に停止していた時間」のこと。秒単位や分単位で計測される。", "beginner": "システムが気絶して倒れていた時間。これが長いほどSLA違反のペナルティが重くなる。", "prompt": "障害などでシステムが「完全に停止していた時間」のこと。秒単位や分単位で計測される。", "choices": ["Ins", "msec", "光ケーブルの種類", "ダウンタイム"], "answerIndex": 3}, {"id": 56, "type": "meaning2term", "category": "設計・運用", "term": "Description", "meaning": "機器のポートや回線に付けるメモ・ラベル。接続先や用途を記載して管理を楽にする。", "beginner": "スイッチやルーターのポートに「対向装置名」「回線名」「接続拠点」などを記載し、どこへ接続されているかを識別するための管理情報。", "prompt": "機器のポートや回線に付けるメモ・ラベル。接続先や用途を記載して管理を楽にする。", "choices": ["一次対応（いちじたいおう）", "Description", "ラッキング", "疑似リンクダウン"], "answerIndex": 1}, {"id": 57, "type": "term2meaning", "category": "障害・品質", "term": "サイレント障害", "meaning": "監視ツール上はエラーが出ていないのに、なぜかユーザー側でサービスが使えない恐怖の障害。", "beginner": "「健康診断はオールA（正常）なのに、本人は体調不良で倒れている」ような状態。気付きにくく厄介。", "prompt": "サイレント障害", "choices": ["データが送信されてから相手に届くまでの「遅延時間」のこと。", "監視ツール上はエラーが出ていないのに、なぜかユーザー側でサービスが使えない恐怖の障害。", "Layer 3（レイヤー3）の略。ネットワーク層。IPアドレスでルーティングする層。", "キャリア（NTT等）の通信機器や光ファイバがギッシリ詰まった専用の建物。"], "answerIndex": 1}, {"id": 58, "type": "term2meaning", "category": "構造・制御", "term": "Down/Enable", "meaning": "ポートが物理的にDOWN（リンク断）だが、管理上は有効（Enable）になっている状態。", "beginner": "スイッチポートは使用可能に設定されているが、LANケーブルが抜けている（または対向機器の電源がOFF）の状態。\n→ポートは開いているが相手が見つからない。", "prompt": "Down/Enable", "choices": ["Signal Detectの略。受信側で有効な光信号を検出している状態を示す。リンクアップの判断材料として使用される。相手の信号は見えている状態。", "平均修復時間。障害が起きてから、「どれだけ早く直せたか」の平均値。運用の腕の見せ所。", "通信設備や伝送装置、回線などを収容・管理する単位。局舎や通信室内で設備を搭載するラックやフレームを指すことが多い。", "ポートが物理的にDOWN（リンク断）だが、管理上は有効（Enable）になっている状態。"], "answerIndex": 3}, {"id": 59, "type": "term2meaning", "category": "構造・制御", "term": "フラッディング", "meaning": "スイッチが宛先不明のフレームを受信した際、全ポートに一斉送信して届け先を探すこと。", "beginner": "「〇〇さんいますかー！」と全部屋に向かって叫ぶブロードキャスト的な動作。大きいNW設計では帯域圧迫させる要因にもなる。", "prompt": "フラッディング", "choices": ["データセンターや局舎のスペースを借りて、自社の通信機器を置かせてもらうこと。", "スイッチが宛先不明のフレームを受信した際、全ポートに一斉送信して届け先を探すこと。", "通信設備や伝送装置、回線などを収容・管理する単位。局舎や通信室内で設備を搭載するラックやフレームを指すことが多い。", "電波は満本（アンテナ最大）立っているのに、データが全く流れてこない状態。"], "answerIndex": 1}, {"id": 60, "type": "term2meaning", "category": "構造・制御", "term": "Down/Disable", "meaning": "ポートが物理的にDOWNで、管理上も無効（Disable）になっている状態。", "beginner": "スイッチ管理者がポートを shutdown している状態。ケーブルは接続されている状態では、両端が同じステータスになる。\n→ポートを閉じており相手もいない。", "prompt": "Down/Disable", "choices": ["ネットワーク内でデータが無限にぐるぐる回り続け、帯域を食いつぶしてパンクさせる事故。", "自分の手に負えない障害が起きたとき、上の先輩や上司、専門チームに「助けてください！」と報告すること。", "サービス品質「目標」。SLA（約束）の一歩手前で、「社内的にこのレベルを目指そうぜ」と掲げる努力目標。", "ポートが物理的にDOWNで、管理上も無効（Disable）になっている状態。"], "answerIndex": 3}, {"id": 61, "type": "meaning2term", "category": "障害・品質", "term": "err-disable", "meaning": "スイッチがループ検知などにより、ポートを自動的に無効化した状態。疑似リンクダウン（論理的なリンクダウン）をさせる。", "beginner": "「危険だからこのポートは閉鎖！」とスイッチが自動判断した状態。原因調査が必要。", "prompt": "スイッチがループ検知などにより、ポートを自動的に無効化した状態。疑似リンクダウン（論理的なリンクダウン）をさせる。", "choices": ["err-disable", "サイレント障害", "Cat5e", "ラストワンマイル"], "answerIndex": 0}, {"id": 62, "type": "meaning2term", "category": "障害・品質", "term": "ボトルネック", "meaning": "ネットワーク全体の性能を\"一番低い部分が決めてしまう現象\"", "beginner": "ここが遅いせいで、他がどれだけ速くても全体が遅くなる場所。アプリの処理能力が遅かったり、細い帯域があることが原因になりえる。", "prompt": "ネットワーク全体の性能を\"一番低い部分が決めてしまう現象\"", "choices": ["ボトルネック", "障害報告書（障報）", "ステージング環境", "Flush"], "answerIndex": 0}, {"id": 63, "type": "term2meaning", "category": "物理・配線", "term": "サッカー", "meaning": "光コネクタの一種（SC/APCコネクタ）の現場での俗称。緑色が目印。", "beginner": "光ファイバのコネクタ形状の一種。先端が緑色のやつを指すことが多い。", "prompt": "サッカー", "choices": ["送信用と受信用で複数芯の光ファイバーを使用する通信方式。", "光コネクタの一種（SC/APCコネクタ）の現場での俗称。緑色が目印。", "1台が本番用（Active）として働き、もう1台はもしもの時のために待機（Standby）している構成。", "Time To Liveの略。パケットがネットワーク上を転送できる最大ホップ数（寿命）。"], "answerIndex": 1}, {"id": 64, "type": "meaning2term", "category": "障害・品質", "term": "パケ代 / 通信費枯渇", "meaning": "検証環境などで従量課金やデータ転送の設定をミスり、クラウドの請求が爆発すること。", "beginner": "インフラの検証で動画データをループさせ、数日で数十万円の請求が来て青ざめるアレ。", "prompt": "検証環境などで従量課金やデータ転送の設定をミスり、クラウドの請求が爆発すること。", "choices": ["可用性 / アベイラビリティ", "疑似リンクダウン", "ボトルネック", "パケ代 / 通信費枯渇"], "answerIndex": 3}, {"id": 65, "type": "meaning2term", "category": "SLA・契約", "term": "可用性 / アベイラビリティ", "meaning": "システムが「壊れることなく、いつでも使える状態を維持できている度合い」。", "beginner": "「いつでも頼りになって、絶対にドタキャンしない度合い」。インフラエンジニアが最も追い求める指標。", "prompt": "システムが「壊れることなく、いつでも使える状態を維持できている度合い」。", "choices": ["バックアウト", "powerfail", "可用性 / アベイラビリティ", "ルーター跨ぎ（またぎ）"], "answerIndex": 2}, {"id": 66, "type": "term2meaning", "category": "SLA・契約", "term": "RPO", "meaning": "目標復旧時点。バックアップから復旧するとき、「最悪、何時間前のデータまでなら消えても許されるか」の指標。", "beginner": "「毎日夜12時に日記（バックアップ）を書いてるから、昼に事故ったら最悪『昨日の夜時点（RPO）』まで戻る」の合意。", "prompt": "RPO", "choices": ["目標復旧時点。バックアップから復旧するとき、「最悪、何時間前のデータまでなら消えても許されるか」の指標。", "災害や大規模障害発生時でも業務を継続するための計画。", "1台が本番用（Active）として働き、もう1台はもしもの時のために待機（Standby）している構成。", "プロバイダ（ISP）同士が互いに大規模にデータを交換するインターネット上の巨大な接続ポイント。"], "answerIndex": 0}, {"id": 67, "type": "meaning2term", "category": "SLA・契約", "term": "EOS", "meaning": "End of Salesの略。メーカーがその製品の販売を終了すること。買いたくてももう買えない。", "beginner": "「この型のテレビは生産終了で、もう在庫限りです」という状態。", "prompt": "End of Salesの略。メーカーがその製品の販売を終了すること。買いたくてももう買えない。", "choices": ["LACP", "冗長化（じょうちょうか）", "syslog", "EOS"], "answerIndex": 3}, {"id": 68, "type": "term2meaning", "category": "設計・運用", "term": "Pingサーバ（OMS,LPS,TRQX）", "meaning": "ネットワーク機器の死活監視を行う専用サーバ群。定期的にPingを送って生存確認する。", "beginner": "「全員点呼！」を自動で行ってくれる監視の番人たち。異常があれば即アラート。", "prompt": "Pingサーバ（OMS,LPS,TRQX）", "choices": ["行き（リクエスト）は繋がるが、帰り（レスポンス）の通信が戻ってこない現象。", "スイッチのFDBに登録されたMACアドレス情報が、一定時間後に自動削除されるまでの時間。", "FDB（MACアドレステーブル）の内容を強制的に書き換える動作。", "ネットワーク機器の死活監視を行う専用サーバ群。定期的にPingを送って生存確認する。"], "answerIndex": 3}, {"id": 69, "type": "term2meaning", "category": "物理・配線", "term": "建設", "meaning": "新規に回線や設備を敷設・構築すること。工事を伴う物理的な準備作業。", "beginner": "新しい道路を一から作るように、光ファイバや機器を新規で設置する大仕事。機器設定も含まれることも。", "prompt": "建設", "choices": ["スイッチやルーターに装着し、電気信号と光信号を相互変換する装置（SFP、QSFPなど）。", "Out of Serviceの略。機器やポートを意図的にサービスから切り離した（停止させた）状態。", "1台の筐体（きょうたい）内で、管理カードやラインカードを二重化して冗長性を持たせること。", "新規に回線や設備を敷設・構築すること。工事を伴う物理的な準備作業。"], "answerIndex": 3}, {"id": 70, "type": "meaning2term", "category": "構造・制御", "term": "TTL", "meaning": "Time To Liveの略。パケットがネットワーク上を転送できる最大ホップ数（寿命）。", "beginner": "パケットの「消費期限」。これが0になると破棄される。無限ループ防止の仕組み。", "prompt": "Time To Liveの略。パケットがネットワーク上を転送できる最大ホップ数（寿命）。", "choices": ["TTL", "SLA", "現調（げんちょう）", "計画断"], "answerIndex": 0}, {"id": 71, "type": "term2meaning", "category": "設計・運用", "term": "Reboot", "meaning": "Reboot（リブート）。機器やサーバを再起動すること。", "beginner": "パソコンを再起動するのと同じ。困ったらとりあえずリブートは万国共通の対処法。ただし再起動はリスクあるので気軽には実施できない現場が多い。本番環境では誰かしらの許可が必要。", "prompt": "Reboot", "choices": ["RX（Receive）    対向装置から送られてきたデータを受け取る受信口。", "Reboot（リブート）。機器やサーバを再起動すること。", "冗長構成の一方の系統が停止し、残る1系統のみでサービスを継続している状態。", "根本原因分析。表面的なエラーだけでなく「なぜそのミスが起きたか、体制や手順に問題はないか」まで深掘りすること。"], "answerIndex": 1}, {"id": 72, "type": "term2meaning", "category": "障害・品質", "term": "ジッタ", "meaning": "通信が届く時間の間隔が一定にならず、バラバラに揺らいで遅れて届くこと。", "beginner": "一定テンポのデータが不規則になること。Web会議で声がロボットみたいにガビガビになる原因。", "prompt": "ジッタ", "choices": ["壊れたときのために、機器や回線をあらかじめ2系統以上用意しておくこと。", "通信が届く時間の間隔が一定にならず、バラバラに揺らいで遅れて届くこと。", "製品やサービスがメーカーから顧客に届くまでの取引経路・流通ルートのこと。誰が誰に売るかの関係性。", "ネットワーク機器のポートが物理的または論理的に切断され、通信不能になった状態。"], "answerIndex": 1}, {"id": 73, "type": "term2meaning", "category": "物理・配線", "term": "ダークファイバ", "meaning": "すでに地面や電柱に敷設されている光ファイバのうち、まだ使われておらず光が通っていない予備回線。", "beginner": "いつでも通れるように作ってある「開通前の誰も走っていない高速道路」。", "prompt": "ダークファイバ", "choices": ["TX（Transmit）　通信機器や光モジュールがデータや光信号を送信する側（送信系統）。", "すでに地面や電柱に敷設されている光ファイバのうち、まだ使われておらず光が通っていない予備回線。", "光コネクタ端面を清掃するための光ファイバー専用クリーナー。", "夜間作業などのメンテナンスで、新しい設定や切替に失敗した際、「元の正常な状態に戻す」作業。"], "answerIndex": 1}, {"id": 74, "type": "term2meaning", "category": "構造・制御", "term": "デフォルトゲートウェイ", "meaning": "PCやサーバーが「外のネットワーク（インターネット）に行きたいとき、最初に通る出口（ルーター）」のこと。", "beginner": "「迷ったらとりあえずここに行け」という、村の唯一の『外の世界へ繋がる関所・門』。", "prompt": "デフォルトゲートウェイ", "choices": ["Time To Liveの略。パケットがネットワーク上を転送できる最大ホップ数（寿命）。", "PCやサーバーが「外のネットワーク（インターネット）に行きたいとき、最初に通る出口（ルーター）」のこと。", "電波は満本（アンテナ最大）立っているのに、データが全く流れてこない状態。", "Signal Detectの略。受信側で有効な光信号を検出している状態を示す。リンクアップの判断材料として使用される。相手の信号は見えている状態。"], "answerIndex": 1}, {"id": 75, "type": "meaning2term", "category": "障害・品質", "term": "LAG縮退", "meaning": "LAGを構成する複数回線のうち、一部が障害で減ってしまった状態。帯域が減少する。", "beginner": "4車線道路のうち2車線が工事中で、残り2車線だけで頑張っている状態。冗長性が低下。", "prompt": "LAGを構成する複数回線のうち、一部が障害で減ってしまった状態。帯域が減少する。", "choices": ["LAG縮退", "レイヤ", "JJ", "ケーブルストレス"], "answerIndex": 0}, {"id": 76, "type": "meaning2term", "category": "設計・運用", "term": "リカバリ", "meaning": "障害やデータ損失から、バックアップ等を使ってシステムを復旧させること。", "beginner": "事故で壊れた車を修理工場で直すように、システムを元の状態に戻す作業。", "prompt": "障害やデータ損失から、バックアップ等を使ってシステムを復旧させること。", "choices": ["powerfail", "コロケーション", "リカバリ", "BBU"], "answerIndex": 2}, {"id": 77, "type": "meaning2term", "category": "構造・制御", "term": "カプセル化", "meaning": "データにヘッダー（宛先シールや封筒）をペタペタ貼り付けて、次のレイヤーへ送る準備をすること。", "beginner": "手紙（データ）を便箋に入れ、住所を書き、さらに宅急便の箱（ヘッダー）に詰めるマトリョーシカのような作業。", "prompt": "データにヘッダー（宛先シールや封筒）をペタペタ貼り付けて、次のレイヤーへ送る準備をすること。", "choices": ["ギガビットイーサ", "カプセル化", "踏み台サーバ", "ジッタ"], "answerIndex": 1}, {"id": 78, "type": "term2meaning", "category": "構造・制御", "term": "DNS", "meaning": "Domain Name Systemの略。ドメイン名（google.com等）をIPアドレスに変換する仕組み。", "beginner": "「〇〇さんの家どこ？」と聞くと住所を教えてくれる電話帳サービス。これが止まるとネットが使えなくなる。", "prompt": "DNS", "choices": ["Domain Name Systemの略。ドメイン名（google.com等）をIPアドレスに変換する仕組み。", "シングルモード（SM）とマルチモード（MM）が代表的。距離や用途で使い分ける。", "シリアルケーブル等で機器に直接接続し、CLI（コマンドライン）で操作する接続方式。", "壊れたときのために、機器や回線をあらかじめ2系統以上用意しておくこと。"], "answerIndex": 0}, {"id": 79, "type": "term2meaning", "category": "構造・制御", "term": "Up/Enable", "meaning": "ポートが物理的にUP（リンク確立）しており、かつ管理上も有効（Enable）な正常状態。", "beginner": "スイッチポートにLANケーブルが正しく接続され、対向機器とも正常にリンクが確立されており、通信できる状態。\n→ポートは開いているが相手が見つからない。", "prompt": "Up/Enable", "choices": ["ポートが物理的にUP（リンク確立）しており、かつ管理上も有効（Enable）な正常状態。", "光コネクタの一種（SC/APCコネクタ）の現場での俗称。緑色が目印。", "ユーザーのデータ（音声・映像・通信）が実際に流れる本来の通信経路。", "主系・予備系の両方が正常に動作している状態。"], "answerIndex": 0}, {"id": 80, "type": "meaning2term", "category": "障害・品質", "term": "片系断", "meaning": "冗長構成の一方の系統で障害が発生している状態。", "beginner": "主系または予備系のどちらか一方の回線・装置が故障し、冗長性が失われている状態。", "prompt": "冗長構成の一方の系統で障害が発生している状態。", "choices": ["Down/Disable", "ラストワンマイル", "片系断", "フリアク"], "answerIndex": 2}, {"id": 81, "type": "meaning2term", "category": "障害・品質", "term": "片系運用", "meaning": "冗長構成の一方の系統が停止し、残る1系統のみでサービスを継続している状態。", "beginner": "主系または予備系のどちらか一方だけで通信サービスを継続している状態。障害発生時の余裕がない。", "prompt": "冗長構成の一方の系統が停止し、残る1系統のみでサービスを継続している状態。", "choices": ["片系運用", "キープアライブ", "セル", "架（が）"], "answerIndex": 0}, {"id": 82, "type": "meaning2term", "category": "構造・制御", "term": "エッジSW", "meaning": "ネットワークの末端（エッジ）に配置されるスイッチ。エンドユーザーを収容する。", "beginner": "ユーザー端末をネットワークへ収容する最前線のスイッチ。PCやIP電話、アクセスポイントなどが直接接続される機器。", "prompt": "ネットワークの末端（エッジ）に配置されるスイッチ。エンドユーザーを収容する。", "choices": ["エッジSW", "EOL", "電流", "レイヤ"], "answerIndex": 0}, {"id": 83, "type": "meaning2term", "category": "SLA・契約", "term": "RCA", "meaning": "根本原因分析。表面的なエラーだけでなく「なぜそのミスが起きたか、体制や手順に問題はないか」まで深掘りすること。", "beginner": "「コケた原因は石があったから」で終わらせず、「なぜそこに石があるのを見落としたか」を突き詰めること。", "prompt": "根本原因分析。表面的なエラーだけでなく「なぜそのミスが起きたか、体制や手順に問題はないか」まで深掘りすること。", "choices": ["RCA", "ハザーダス状態", "疑似リンクダウン", "オンプレ"], "answerIndex": 0}, {"id": 84, "type": "term2meaning", "category": "設計・運用", "term": "ホットスタンバイ", "meaning": "予備機の電源を入れた状態で待機させる構成。すぐ切り替えられるが電気代がかかる。", "beginner": "控え選手がウォーミングアップ済みで待機。即座に交代できるが、その分コストがかかる。", "prompt": "ホットスタンバイ", "choices": ["メンテナンスや設備更改などのため、事前告知のうえで実施する計画的な通信断。", "End of Salesの略。メーカーがその製品の販売を終了すること。買いたくてももう買えない。", "予備機の電源を入れた状態で待機させる構成。すぐ切り替えられるが電気代がかかる。", "機器の管理用ネットワーク（インバンド）経由で、対象機器に向けてPingを打つ疎通確認。"], "answerIndex": 2}, {"id": 85, "type": "meaning2term", "category": "構造・制御", "term": "アップリンク", "meaning": "ネットワークにおいて、上位（コア側・バックボーン側）へ向かう方向の通信。", "beginner": "支流から本流へ、地方から東京へ向かう「上り」の通信方向。", "prompt": "ネットワークにおいて、上位（コア側・バックボーン側）へ向かう方向の通信。", "choices": ["RCA", "ホットスワップ", "アップリンク", "継続断"], "answerIndex": 2}, {"id": 86, "type": "meaning2term", "category": "物理・配線", "term": "光パワーメーター", "meaning": "光ファイバーケーブルやレーザー機器などを通過する光の強さ（光パワー）を測定するための計測器", "beginner": "光通信が正常に動くためには、データの「勢い（強さ）」がちょうどいい状態で届く必要がある。信号の強さを計測する機器", "prompt": "光ファイバーケーブルやレーザー機器などを通過する光の強さ（光パワー）を測定するための計測器", "choices": ["Down/Enable", "RCA", "SD/Disable", "光パワーメーター"], "answerIndex": 3}, {"id": 87, "type": "term2meaning", "category": "SLA・契約", "term": "SLO", "meaning": "サービス品質「目標」。SLA（約束）の一歩手前で、「社内的にこのレベルを目指そうぜ」と掲げる努力目標。", "beginner": "「本当は毎日7時起き（SLO）を目指してるけど、親との約束（SLA）は遅くとも8時起き」という社内目標。", "prompt": "SLO", "choices": ["障害復旧後、元の系統（Active）に自動で戻るまでの待機時間。", "パケットの到着時間がばらつく現象。音声や映像品質に影響を与える。", "サービス品質「目標」。SLA（約束）の一歩手前で、「社内的にこのレベルを目指そうぜ」と掲げる努力目標。", "送信用と受信用で複数芯の光ファイバーを使用する通信方式。"], "answerIndex": 2}, {"id": 88, "type": "meaning2term", "category": "構造・制御", "term": "アップリンクポート", "meaning": "上位のスイッチやルーターと接続するためのポート。大容量・高速なことが多い。", "beginner": "上の階（上位機器）へ繋がる「エレベーター専用の接続口」。太い回線が使われる。", "prompt": "上位のスイッチやルーターと接続するためのポート。大容量・高速なことが多い。", "choices": ["Ous", "eth", "アップリンクポート", "ループ"], "answerIndex": 2}, {"id": 89, "type": "meaning2term", "category": "構造・制御", "term": "セル", "meaning": "基地局がカバーする電波のエリア（範囲）のこと。1つの基地局で複数セルを持つことも。", "beginner": "携帯の電波が届く「部屋」のようなもの。移動すると隣のセルにハンドオーバーする。", "prompt": "基地局がカバーする電波のエリア（範囲）のこと。1つの基地局で複数セルを持つことも。", "choices": ["コンソール接続", "outband ping", "スタティックルーティング", "セル"], "answerIndex": 3}, {"id": 90, "type": "term2meaning", "category": "構造・制御", "term": "トポロジ", "meaning": "ネットワークの接続形態・構成図。どの機器がどう繋がっているかを表す。", "beginner": "ネットワークの「家系図」や「路線図」。スター型、リング型、メッシュ型などがある。", "prompt": "トポロジ", "choices": ["冗長構成の一方の系統が故障・停止し、残る1系統のみでサービスを継続している警戒状態。残存系統に障害が発生するとサービス停止に直結する。", "「最大限の努力はするけど、品質の保証はしないよ」という提供方式。一般的な家庭用ネット回線。", "Reboot（リブート）。機器やサーバを再起動すること。", "ネットワークの接続形態・構成図。どの機器がどう繋がっているかを表す。"], "answerIndex": 3}, {"id": 91, "type": "meaning2term", "category": "物理・配線", "term": "コロケーション", "meaning": "データセンターや局舎のスペースを借りて、自社の通信機器を置かせてもらうこと。", "beginner": "シェアハウスの1部屋を借りて、自分の特等席（ラック）を作らせてもらうイメージ。", "prompt": "データセンターや局舎のスペースを借りて、自社の通信機器を置かせてもらうこと。", "choices": ["切り替え", "コロケーション", "踏み台サーバ", "msec"], "answerIndex": 1}, {"id": 92, "type": "term2meaning", "category": "設計・運用", "term": "アラームマスク", "meaning": "特定のアラーム（警告）を一時的に無視・非表示にする設定。メンテナンス中に使用。", "beginner": "作業中は「作業時に出る警報を一旦消しておく」設定。これをすればNW監視部隊のリソースを減らせる。作業完了後は必ず戻す。", "prompt": "アラームマスク", "choices": ["サービス影響や設備変更を考慮し、手順書に従って実施するメンテナンス作業。", "ネットワーク全体の性能を\"一番低い部分が決めてしまう現象\"", "特定のアラーム（警告）を一時的に無視・非表示にする設定。メンテナンス中に使用。", "新規に回線や設備を敷設・構築すること。工事を伴う物理的な準備作業。"], "answerIndex": 2}, {"id": 93, "type": "term2meaning", "category": "物理・配線", "term": "ケーブルストレス", "meaning": "曲げすぎ、引っ張りすぎ、圧迫などによりケーブルへ負荷がかかっている状態。", "beginner": "光ファイバーやLANケーブルに無理な力が加わり、通信品質悪化や断線の原因となる状態。", "prompt": "ケーブルストレス", "choices": ["曲げすぎ、引っ張りすぎ、圧迫などによりケーブルへ負荷がかかっている状態。", "ネットワークの末端に配置されるゲートウェイ。外部との接続点。", "アクセスが集中しすぎて、回線や機器がパンク（大渋滞）している状態。", "e-NodeB（イーノードビー）の略。LTE（4G）の基地局のこと。5GではgNBと呼ぶ。"], "answerIndex": 0}, {"id": 94, "type": "term2meaning", "category": "物理・配線", "term": "SFPモジュール", "meaning": "ルーターやスイッチに光ファイバを挿すために、専用ポートにカチッとハメる小さな変換パーツ。", "beginner": "機器の拡張スロットに挿す、光のプラグ差込口アタッチメント。失くすと怒られる。", "prompt": "SFPモジュール", "choices": ["ルーター等によって区切られた、同じIPアドレスのルールを持つ「1つのグループ（部屋）」。", "ラックの裏側のLANケーブルや光ケーブルがスパゲティ状態にならないよう、綺麗に束ねて整理すること。", "ルーターやスイッチに光ファイバを挿すために、専用ポートにカチッとハメる小さな変換パーツ。", "根本原因分析。表面的なエラーだけでなく「なぜそのミスが起きたか、体制や手順に問題はないか」まで深掘りすること。"], "answerIndex": 2}, {"id": 95, "type": "meaning2term", "category": "設計・運用", "term": "リトライ", "meaning": "通信やコマンドが失敗した際に、自動または手動で再度試行すること。", "beginner": "電話が繋がらなかった時に「もう一回かけ直す」こと。システムが自動でやってくれることも多い。", "prompt": "通信やコマンドが失敗した際に、自動または手動で再度試行すること。", "choices": ["ダウンリンク", "コンソール接続", "LLDP", "リトライ"], "answerIndex": 3}, {"id": 96, "type": "meaning2term", "category": "障害・品質", "term": "powerfail", "meaning": "電源障害。停電や電源ユニット故障により、機器への電力供給が途絶えること。", "beginner": "「コンセントが抜けた」状態。UPS（無停電電源）があれば少しは耐えられる。", "prompt": "電源障害。停電や電源ユニット故障により、機器への電力供給が途絶えること。", "choices": ["障害報告書（障報）", "RX", "アラームマスク", "powerfail"], "answerIndex": 3}, {"id": 97, "type": "meaning2term", "category": "物理・配線", "term": "光ケーブル", "meaning": "光ファイバーを内蔵し、光信号を伝送するためのケーブル。", "beginner": "通信装置同士を光で接続する伝送路。長距離・高速通信を実現するための回線。", "prompt": "光ファイバーを内蔵し、光信号を伝送するためのケーブル。", "choices": ["シングル構成", "スタンドアローン", "Up/Enable", "光ケーブル"], "answerIndex": 3}, {"id": 98, "type": "term2meaning", "category": "物理・配線", "term": "Cat5e", "meaning": "Ethernet通信用のLANケーブル規格の一つ。1Gbps通信に対応。", "beginner": "スイッチとPCやルーターを接続するための標準的なLANケーブル。", "prompt": "Cat5e", "choices": ["Ethernet通信用のLANケーブル規格の一つ。1Gbps通信に対応。", "データが送信されてから相手に届くまでの「遅延時間」のこと。", "光信号（光ファイバ）と電気信号（LANケーブル）を互いに変換する、手のひらサイズの四角い箱。", "古い機器やシステムを新しいものに置き換えること。交換・更新作業。"], "answerIndex": 0}, {"id": 99, "type": "term2meaning", "category": "障害・品質", "term": "片通（かたづう）", "meaning": "行き（リクエスト）は繋がるが、帰り（レスポンス）の通信が戻ってこない現象。", "beginner": "「声は聞こえるのに、こちらの声が相手に届かない」状態。ファイアウォールの設定ミスで多発。", "prompt": "片通（かたづう）", "choices": ["平均修復時間。障害が起きてから、「どれだけ早く直せたか」の平均値。運用の腕の見せ所。", "ネットワークにおいて、上位（コア側・バックボーン側）へ向かう方向の通信。", "光ファイバーケーブルやレーザー機器などを通過する光の強さ（光パワー）を測定するための計測器", "行き（リクエスト）は繋がるが、帰り（レスポンス）の通信が戻ってこない現象。"], "answerIndex": 3}, {"id": 100, "type": "term2meaning", "category": "構造・制御", "term": "疑似リンクダウン", "meaning": "障害検知時に、上位や対向機器に障害を伝えるため意図的にリンクを落とす機能。", "beginner": "装置A-装置Bが接続された状態で、例えば装置Aで障害を検知した際に装置Bへ障害を通知するため意図的にリンクダウンを発生させる機能。正常にLINDOWNができない状態でも疑似リンクダウンを発生する機能を持つ装置もある。", "prompt": "疑似リンクダウン", "choices": ["根本原因分析。表面的なエラーだけでなく「なぜそのミスが起きたか、体制や手順に問題はないか」まで深掘りすること。", "障害検知時に、上位や対向機器に障害を伝えるため意図的にリンクを落とす機能。", "ネットワーク機器のポートが物理的または論理的に切断され、通信不能になった状態。", "曲げすぎ、引っ張りすぎ、圧迫などによりケーブルへ負荷がかかっている状態。"], "answerIndex": 1}, {"id": 101, "type": "meaning2term", "category": "障害・品質", "term": "msec", "meaning": "ミリ秒（millisecond）の略。1秒の1000分の1。通信の遅延や応答時間を測る単位。", "beginner": "「レイテンシ5msec」のように使う。人間には感じられないが、システムには大きな差。", "prompt": "ミリ秒（millisecond）の略。1秒の1000分の1。通信の遅延や応答時間を測る単位。", "choices": ["syslog", "msec", "powerfail", "アラームマスク"], "answerIndex": 1}, {"id": 102, "type": "meaning2term", "category": "障害・品質", "term": "伝送損失", "meaning": "信号が伝送路を通過する際に減衰して弱くなる現象。", "beginner": "光ファイバーやケーブルを通るうちに信号が弱くなり、受信側へ届くエネルギーが減少する状態。", "prompt": "信号が伝送路を通過する際に減衰して弱くなる現象。", "choices": ["コアSW", "伝送損失", "基地局", "踏み台サーバ"], "answerIndex": 1}, {"id": 103, "type": "term2meaning", "category": "障害・品質", "term": "バースト", "meaning": "突発的に通信量（トラフィック）が跳ね上がること。", "beginner": "「アクセスが急激に集中して、さっき一瞬回線がバーストしました」のように使う。", "prompt": "バースト", "choices": ["光コネクタ同士を中継接続するジョイント部品。光ファイバを延長する時に使う。", "ネットワークの中心に配置される大容量スイッチ。全体のトラフィックを集約する。", "difference（差分）の略。設定ファイルなどの変更前後の違いを比較・表示すること。", "突発的に通信量（トラフィック）が跳ね上がること。"], "answerIndex": 3}, {"id": 104, "type": "meaning2term", "category": "設計・運用", "term": "ステージング環境", "meaning": "本番と全く同じ構成で作られた、最終テスト用の検証環境。", "beginner": "「本番の舞台（本番環境）」で大失敗しないために、裏に作られた「原寸大の超リアルな練習舞台」。", "prompt": "本番と全く同じ構成で作られた、最終テスト用の検証環境。", "choices": ["リカバリ", "ボトルネック", "Down/Disable", "ステージング環境"], "answerIndex": 3}, {"id": 105, "type": "meaning2term", "category": "構造・制御", "term": "ダウンリンク", "meaning": "ネットワークにおいて、下位（エンドユーザー側）へ向かう方向の通信。", "beginner": "本流から支流へ、東京から地方へ向かう「下り」の通信方向。", "prompt": "ネットワークにおいて、下位（エンドユーザー側）へ向かう方向の通信。", "choices": ["EOL", "リンクダウン", "ダウンリンク", "一次対応（いちじたいおう）"], "answerIndex": 2}, {"id": 106, "type": "meaning2term", "category": "物理・配線", "term": "eth", "meaning": "Ethernet（イーサネット）の略。LANケーブルで繋ぐ有線ネットワークの規格・ポート名。", "beginner": "「eth0」「eth1」のように、機器のLANポートを指す時に使う。", "prompt": "Ethernet（イーサネット）の略。LANケーブルで繋ぐ有線ネットワークの規格・ポート名。", "choices": ["RTO", "eth", "フェイルオーバー", "セグメント"], "answerIndex": 1}, {"id": 107, "type": "meaning2term", "category": "設計・運用", "term": "outband ping", "meaning": "管理専用の別回線（アウトオブバンド）経由で、対象機器にPingを打つ疎通確認。", "beginner": "裏道（管理専用線）から「生きてる？」と確認する方法。本線が死んでいても使える。", "prompt": "管理専用の別回線（アウトオブバンド）経由で、対象機器にPingを打つ疎通確認。", "choices": ["LACP", "フェイルオーバー", "outband ping", "L2"], "answerIndex": 2}, {"id": 108, "type": "term2meaning", "category": "設計・運用", "term": "筐体冗長", "meaning": "機器自体を2台用意して冗長化すること。片方が完全に壊れても、もう1台で継続できる。", "beginner": "同じ機器を2台並べて、1台が火事になっても、もう1台で業務継続できる最強の冗長化。", "prompt": "筐体冗長", "choices": ["RX（Receive）    対向装置から送られてきたデータを受け取る受信口。", "機器自体を2台用意して冗長化すること。片方が完全に壊れても、もう1台で継続できる。", "ルーター同士が情報を交換し、「こっちの道は混んでる」「こっちが近道だ」と自動でルートを計算する設定。", "ルーター等によって区切られた、同じIPアドレスのルールを持つ「1つのグループ（部屋）」。"], "answerIndex": 1}, {"id": 109, "type": "meaning2term", "category": "物理・配線", "term": "管理カード（Manage）", "meaning": "ネットワーク機器全体を管理・制御する中枢のカード（基板）。機器の頭脳部分。", "beginner": "機器の「脳みそ」。ここが壊れると全体が動かなくなる最重要パーツ。", "prompt": "ネットワーク機器全体を管理・制御する中枢のカード（基板）。機器の頭脳部分。", "choices": ["帯域保証（たいいきほしょう）", "ハザーダス状態", "管理カード（Manage）", "建設"], "answerIndex": 2}, {"id": 110, "type": "term2meaning", "category": "構造・制御", "term": "仮想化", "meaning": "1台の物理サーバ上で複数の仮想サーバを動かす技術。リソースを効率的に使える。", "beginner": "1つの大きな家を複数の部屋に区切って、それぞれ別の家族が住めるようにする技術。", "prompt": "仮想化", "choices": ["データを送信してから相手に届くまでに発生する遅延時間。", "携帯電話の電波を送受信するアンテナ設備とその周辺機器一式。鉄塔やビル屋上にある。", "サービス影響や設備変更を考慮し、手順書に従って実施するメンテナンス作業。", "1台の物理サーバ上で複数の仮想サーバを動かす技術。リソースを効率的に使える。"], "answerIndex": 3}, {"id": 111, "type": "meaning2term", "category": "設計・運用", "term": "コールドスタンバイ", "meaning": "予備機の電源を落とした状態で待機させる構成。切替に時間がかかるが電気代節約。", "beginner": "控え選手がベンチで寝ている状態。出番が来たら起こして準備させるので時間がかかる。", "prompt": "予備機の電源を落とした状態で待機させる構成。切替に時間がかかるが電気代節約。", "choices": ["msec", "コールドスタンバイ", "芯線対照（しんせんたいしょう）", "セグメント"], "answerIndex": 1}, {"id": 112, "type": "meaning2term", "category": "設計・運用", "term": "アクアク（Active-Active）", "meaning": "予備を作らず、2台の機器を同時にフル稼働させて、負荷を半分ずつ分散する効率的な構成。", "beginner": "2本の車線を両方とも全開にして、車をスムーズに流す状態。片方が壊れたらもう片方に全負荷がいく。", "prompt": "予備を作らず、2台の機器を同時にフル稼働させて、負荷を半分ずつ分散する効率的な構成。", "choices": ["アクアク（Active-Active）", "FDB", "RTO", "管理カード（Manage）"], "answerIndex": 0}, {"id": 113, "type": "meaning2term", "category": "設計・運用", "term": "Revertive Time", "meaning": "障害復旧後、元の系統（Active）に自動で戻るまでの待機時間。", "beginner": "通信が予備回線へ切り替わった後、主回線の復旧を検知しても即座には戻さず、『本当に安定したか』を確認してから主回線へ戻す仕組み。早すぎると不安定になる。", "prompt": "障害復旧後、元の系統（Active）に自動で戻るまでの待機時間。", "choices": ["キープアライブ", "フラッディング", "ジッタ", "Revertive Time"], "answerIndex": 3}, {"id": 114, "type": "meaning2term", "category": "SLA・契約", "term": "障害報告書（障報）", "meaning": "事故を起こした際、お客様向けに「原因、影響範囲、今後の対策」をまとめて提出する、最も胃が痛い書類。", "beginner": "「なぜ事故を起こしたか、どうやって反省し、どう再発防止するか」を論理的に説明する始末書・報告書。", "prompt": "事故を起こした際、お客様向けに「原因、影響範囲、今後の対策」をまとめて提出する、最も胃が痛い書類。", "choices": ["レイヤ", "ステージング環境", "障害報告書（障報）", "継続断"], "answerIndex": 2}, {"id": 115, "type": "meaning2term", "category": "構造・制御", "term": "セグメント", "meaning": "ルーター等によって区切られた、同じIPアドレスのルールを持つ「1つのグループ（部屋）」。", "beginner": "学校でいう「1年A組」「1年B組」という教室の区切り。同じ部屋の中ならルーターなしで話せる。", "prompt": "ルーター等によって区切られた、同じIPアドレスのルールを持つ「1つのグループ（部屋）」。", "choices": ["バースト", "パケ代 / 通信費枯渇", "セグメント", "エッジGW"], "answerIndex": 2}, {"id": 116, "type": "term2meaning", "category": "障害・品質", "term": "ループ", "meaning": "ネットワーク内でデータが無限にぐるぐる回り続け、帯域を食いつぶしてパンクさせる事故。", "beginner": "行き止まりのない円形交差点で車が無限に増え続け、街全体が渋滞で動かなくなる状態。", "prompt": "ループ", "choices": ["古い機器やシステムを新しいものに置き換えること。交換・更新作業。", "製品やサービスがメーカーから顧客に届くまでの取引経路・流通ルートのこと。誰が誰に売るかの関係性。", "ネットワーク内でデータが無限にぐるぐる回り続け、帯域を食いつぶしてパンクさせる事故。", "電源を完全に落とした状態から、機器をゼロからスイッチを入れて起動し直すこと。"], "answerIndex": 2}, {"id": 117, "type": "term2meaning", "category": "設計・運用", "term": "計画作業", "meaning": "サービス影響や設備変更を考慮し、手順書に従って実施するメンテナンス作業。", "beginner": "ネットワークの設定変更や機器交換を、事前に準備した手順に従って実施する作業。", "prompt": "計画作業", "choices": ["主系・予備系の両方が停止し、サービス提供できない状態。", "他の機器と連携せず、単独で動作している状態。または単体で完結する機器構成。", "サーバー室にある、全てのインフラ機器を美しく収めるための世界共通の標準規格の棚。", "サービス影響や設備変更を考慮し、手順書に従って実施するメンテナンス作業。"], "answerIndex": 3}, {"id": 118, "type": "term2meaning", "category": "障害・品質", "term": "Station move", "meaning": "同じMACアドレスが異なるポートで検出され、FDBが更新される現象。", "beginner": "スイッチが『端末Aはポート3の配下』と認識していたが、ポート7から同じMACアドレスを検出したため、\n学習情報（FDB）を書き換えた状態。連続発生することでLOOPとなる。", "prompt": "Station move", "choices": ["通信が届く時間の間隔が一定にならず、バラバラに揺らいで遅れて届くこと。", "障害復旧後、元の系統（Active）に自動で戻るまでの待機時間。", "同じMACアドレスが異なるポートで検出され、FDBが更新される現象。", "ミリ秒（millisecond）の略。1秒の1000分の1。通信の遅延や応答時間を測る単位。"], "answerIndex": 2}, {"id": 119, "type": "term2meaning", "category": "構造・制御", "term": "SD/Disable", "meaning": "Signal Detect（光信号受光状態）ではあるが、管理上は無効（Disable）でポートは使用不可。", "beginner": "対向装置から光信号は届いているが、スイッチ側でポートを shutdown しているため通信を開始しない状態。\n→相手の信号は見えているがポートを閉じている", "prompt": "SD/Disable", "choices": ["Signal Detect（光信号受光状態）ではあるが、管理上は無効（Disable）でポートは使用不可。", "スイッチのFDB（MACアドレステーブル）をクリアして、学習内容を初期化すること。", "機器のポートや回線に付けるメモ・ラベル。接続先や用途を記載して管理を楽にする。", "オンプレミス（On-Premises）の略。自社でサーバやネットワーク機器を保有・運用する形態。"], "answerIndex": 0}, {"id": 120, "type": "term2meaning", "category": "障害・品質", "term": "ジッタ", "meaning": "パケットの到着時間がばらつく現象。音声や映像品質に影響を与える。", "beginner": "パケットが一定間隔で届かず、早く届いたり遅く届いたりしている状態。VoIPや動画配信で音飛びや映像乱れの原因となる。", "prompt": "ジッタ", "choices": ["ネットワーク機器の死活監視を行う専用サーバ群。定期的にPingを送って生存確認する。", "パケットの到着時間がばらつく現象。音声や映像品質に影響を与える。", "ルーター同士が情報を交換し、「こっちの道は混んでる」「こっちが近道だ」と自動でルートを計算する設定。", "検証環境などで従量課金やデータ転送の設定をミスり、クラウドの請求が爆発すること。"], "answerIndex": 1}];
  
 const STORAGE_KEY = 'infraQuizHistory_v1';
+const MAX_HISTORY = 5;
+const MAX_QUESTIONS = ALL_QUESTIONS.length;
  
 function loadHistory(){
   try{
@@ -406,13 +428,16 @@ function saveHistory(h){
 }
  
 let history = loadHistory();
+let selectedCount = Math.min(30, MAX_QUESTIONS);
  
 let state = {
   queue: [],
   index: 0,
   score: 0,
   wrong: [],
-  answered: false,
+  answers: [],
+  currentOrder: null,
+  selectedOptionIndex: null,
 };
  
 const screens = {
@@ -435,6 +460,37 @@ function shuffle(arr){
   return a;
 }
  
+/* ---------- Count selector ---------- */
+function renderCountChips(){
+  const el = document.getElementById('countChips');
+  el.innerHTML = '';
+  for(let n = 10; n <= MAX_QUESTIONS; n += 10){
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'count-chip' + (n === selectedCount ? ' active' : '');
+    chip.textContent = n + '問';
+    chip.addEventListener('click', () => {
+      selectedCount = n;
+      Array.from(el.children).forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+    });
+    el.appendChild(chip);
+  }
+  // 端数（120が10の倍数でない場合の保険）
+  if(MAX_QUESTIONS % 10 !== 0){
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'count-chip' + (MAX_QUESTIONS === selectedCount ? ' active' : '');
+    chip.textContent = MAX_QUESTIONS + '問（全問）';
+    chip.addEventListener('click', () => {
+      selectedCount = MAX_QUESTIONS;
+      Array.from(el.children).forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+    });
+    el.appendChild(chip);
+  }
+}
+ 
 /* ---------- Start screen stats ---------- */
 function renderStartStats(){
   const nav = document.getElementById('navStat');
@@ -454,7 +510,7 @@ function renderStartStats(){
   document.getElementById('statAttempts').textContent = attempts.length;
   document.getElementById('statBest').textContent = best + '%';
   document.getElementById('statLast').textContent = last + '%';
-  nav.textContent = `前回 ${last}% / 挑戦 ${attempts.length}回`;
+  nav.textContent = `前回 ${last}% / 直近${attempts.length}回分の記録`;
  
   const weakEntries = Object.entries(history.missed)
     .sort((a,b)=>b[1]-a[1]).slice(0,6);
@@ -471,16 +527,31 @@ function renderStartStats(){
   } else {
     btnWeak.style.display = 'none';
   }
+ 
+  const historyList = document.getElementById('historyList');
+  historyList.innerHTML = '';
+  attempts.slice().reverse().forEach(a => {
+    const row = document.createElement('div');
+    row.className = 'history-row';
+    const d = new Date(a.date);
+    const dateStr = `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+    row.innerHTML = `<span class="hr-date">${dateStr}</span><span class="hr-score">${a.score} / ${a.total}（${a.accuracy}%）</span>`;
+    historyList.appendChild(row);
+  });
 }
  
 /* ---------- Quiz flow ---------- */
-function startQuiz(questionSet){
+function startQuiz(questionSet, countOverride){
+  const n = countOverride || Math.min(selectedCount, questionSet.length);
+  const pool = shuffle(questionSet);
   state = {
-    queue: shuffle(questionSet),
+    queue: pool.slice(0, n),
     index: 0,
     score: 0,
     wrong: [],
-    answered: false,
+    answers: [],
+    currentOrder: null,
+    selectedOptionIndex: null,
   };
   document.getElementById('qTotal').textContent = state.queue.length;
   showScreen('quiz');
@@ -489,7 +560,8 @@ function startQuiz(questionSet){
  
 function renderQuestion(){
   const q = state.queue[state.index];
-  state.answered = false;
+  state.currentOrder = null;
+  state.selectedOptionIndex = null;
  
   document.getElementById('qCount').textContent = state.index + 1;
   document.getElementById('qCategory').textContent = q.category;
@@ -505,17 +577,16 @@ function renderQuestion(){
   const choicesEl = document.getElementById('choices');
   choicesEl.innerHTML = '';
   const order = shuffle(q.choices.map((text,i)=>({text, isCorrect: i===q.answerIndex})));
+  state.currentOrder = order;
  
   order.forEach((opt, i) => {
     const btn = document.createElement('button');
     btn.className = 'choice';
     btn.innerHTML = `<span class="idx">${String.fromCharCode(65+i)}</span><span>${escapeHtml(opt.text)}</span>`;
-    btn.addEventListener('click', () => selectChoice(btn, opt, q, order));
+    btn.addEventListener('click', () => selectChoice(i));
     choicesEl.appendChild(btn);
   });
  
-  const fb = document.getElementById('feedback');
-  fb.classList.remove('show','correct','wrong');
   document.getElementById('btnNext').disabled = true;
 }
  
@@ -525,37 +596,31 @@ function escapeHtml(str){
   return div.innerHTML;
 }
  
-function selectChoice(btn, opt, q, order){
-  if(state.answered) return;
-  state.answered = true;
- 
+function selectChoice(i){
+  state.selectedOptionIndex = i;
   const buttons = Array.from(document.getElementById('choices').children);
-  buttons.forEach((b, i) => {
-    b.disabled = true;
-    if(order[i].isCorrect) b.classList.add('correct');
-  });
- 
-  const fb = document.getElementById('feedback');
-  const fbTitle = document.getElementById('fbTitle');
-  const fbBody = document.getElementById('fbBody');
- 
-  if(opt.isCorrect){
-    state.score++;
-    fb.classList.add('show','correct');
-    fbTitle.textContent = '正解';
-  } else {
-    btn.classList.add('wrong');
-    state.wrong.push(q);
-    fb.classList.add('show','wrong');
-    fbTitle.textContent = '不正解';
-  }
-  fbBody.innerHTML = `<b>${escapeHtml(q.term)}</b>:${escapeHtml(q.meaning)}<br>${escapeHtml(q.beginner)}`;
- 
+  buttons.forEach((b, idx) => b.classList.toggle('selected', idx === i));
   document.getElementById('btnNext').disabled = false;
 }
  
 document.getElementById('btnNext').addEventListener('click', () => {
-  if(!state.answered) return;
+  if(state.selectedOptionIndex === null) return;
+ 
+  const q = state.queue[state.index];
+  const order = state.currentOrder;
+  const chosen = order[state.selectedOptionIndex];
+  const correctOpt = order.find(o => o.isCorrect);
+  const isCorrect = !!chosen.isCorrect;
+ 
+  if(isCorrect){ state.score++; } else { state.wrong.push(q); }
+ 
+  state.answers.push({
+    q,
+    chosenText: chosen.text,
+    correctText: correctOpt.text,
+    isCorrect,
+  });
+ 
   state.index++;
   if(state.index >= state.queue.length){
     finishQuiz();
@@ -564,15 +629,22 @@ document.getElementById('btnNext').addEventListener('click', () => {
   }
 });
  
-function finishQuiz(){
-  document.getElementById('progressFill').style.width = '100%';
+document.getElementById('btnHomeFromQuiz').addEventListener('click', () => {
+  if(state.queue.length && state.index < state.queue.length){
+    const ok = window.confirm('進行中のクイズを終了してホームに戻りますか？（この回の記録は保存されません）');
+    if(!ok) return;
+  }
+  showScreen('start');
+  renderStartStats();
+});
  
+function finishQuiz(){
   const total = state.queue.length;
   const correct = state.score;
   const accuracy = Math.round((correct/total)*100);
  
   history.attempts.push({ date: new Date().toISOString(), score: correct, total, accuracy });
-  if(history.attempts.length > 30) history.attempts = history.attempts.slice(-30);
+  if(history.attempts.length > MAX_HISTORY) history.attempts = history.attempts.slice(-MAX_HISTORY);
  
   state.wrong.forEach(q => {
     history.missed[q.term] = (history.missed[q.term] || 0) + 1;
@@ -592,7 +664,7 @@ function finishQuiz(){
   document.getElementById('resultSub').textContent = sub;
  
   renderCategoryBreakdown();
-  renderReview();
+  renderResultsList();
  
   showScreen('result');
   renderStartStats();
@@ -600,13 +672,11 @@ function finishQuiz(){
  
 function renderCategoryBreakdown(){
   const byCat = {};
-  state.queue.forEach(q => {
-    byCat[q.category] = byCat[q.category] || { total:0, correct:0 };
-    byCat[q.category].total++;
-  });
-  const wrongTermsThisRound = new Set(state.wrong.map(q => q.id));
-  state.queue.forEach(q => {
-    if(!wrongTermsThisRound.has(q.id)) byCat[q.category].correct++;
+  state.answers.forEach(a => {
+    const cat = a.q.category;
+    byCat[cat] = byCat[cat] || { total:0, correct:0 };
+    byCat[cat].total++;
+    if(a.isCorrect) byCat[cat].correct++;
   });
  
   const el = document.getElementById('catBreakdown');
@@ -623,20 +693,22 @@ function renderCategoryBreakdown(){
   });
 }
  
-function renderReview(){
+function renderResultsList(){
   const el = document.getElementById('reviewList');
   el.innerHTML = '';
-  if(state.wrong.length === 0){
-    el.innerHTML = '<div class="review-empty">全問正解です。素晴らしいです。</div>';
-    return;
-  }
-  state.wrong.forEach(q => {
+  state.answers.forEach((a, i) => {
+    const q = a.q;
     const item = document.createElement('div');
-    item.className = 'review-item';
+    item.className = 'review-item ' + (a.isCorrect ? 'correct' : 'wrong');
     item.innerHTML = `
-      <div class="rt"><span class="cat-badge">${escapeHtml(q.category)}</span></div>
-      <div class="term">${escapeHtml(q.term)}</div>
-      <div class="meaning">${escapeHtml(q.meaning)}</div>
+      <div class="rt">
+        <span class="cat-badge">${escapeHtml(q.category)}</span>
+        <span class="result-tag ${a.isCorrect ? 'correct' : 'wrong'}">${a.isCorrect ? '正解' : '不正解'}</span>
+        <span>問題 ${i+1}</span>
+      </div>
+      <div class="term">${escapeHtml(q.prompt)}</div>
+      ${a.isCorrect ? '' : `<div class="your-answer">あなたの回答: ${escapeHtml(a.chosenText)}</div>`}
+      <div class="meaning"><b>${escapeHtml(q.term)}</b>：${escapeHtml(q.meaning)}</div>
       <div class="beginner">${escapeHtml(q.beginner)}</div>
     `;
     el.appendChild(item);
@@ -648,15 +720,16 @@ document.getElementById('btnStart').addEventListener('click', () => startQuiz(AL
 document.getElementById('btnReviewWeak').addEventListener('click', () => {
   const weakTerms = new Set(Object.keys(history.missed));
   const set = ALL_QUESTIONS.filter(q => weakTerms.has(q.term));
-  startQuiz(set.length ? set : ALL_QUESTIONS);
+  if(set.length){ startQuiz(set, set.length); } else { startQuiz(ALL_QUESTIONS); }
 });
 document.getElementById('btnRetryWrong').addEventListener('click', () => {
   if(state.wrong.length === 0){ startQuiz(ALL_QUESTIONS); return; }
-  startQuiz(state.wrong);
+  startQuiz(state.wrong, state.wrong.length);
 });
 document.getElementById('btnRetryAll').addEventListener('click', () => startQuiz(ALL_QUESTIONS));
 document.getElementById('btnHome').addEventListener('click', () => { showScreen('start'); renderStartStats(); });
  
+renderCountChips();
 renderStartStats();
 </script>
 </body>
