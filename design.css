@@ -1,0 +1,315 @@
+:root{
+  /* ---- カラー：ティール × コーラル × ネイビー ---- */
+  --bg:#ffffff;
+  --bg-alt:#f4f6f8;
+  --ink:#23262b;
+  --ink-soft:#6b7280;
+ 
+  --blue:#2fa393;          /* ティール（メインアクセント） */
+  --blue-hover:#25887a;
+  --blue-soft:#e6f4f1;
+ 
+  --green:#2fa393;         /* 正解表示もティールで統一 */
+  --green-soft:#e6f4f1;
+ 
+  --red:#f0585f;           /* コーラル（CTA・不正解） */
+  --red-dark:#d6414a;
+  --red-soft:#fdecec;
+ 
+  --navy:#181b20;          /* 帯・フッターのネイビー */
+  --yellow:#f5e35b;        /* ワンポイントの黄色 */
+ 
+  --line:#dfe3e7;
+ 
+  /* 角丸は最小限に：直線的なコーポレートUIへ */
+  --radius-lg:6px;
+  --radius-md:4px;
+  --radius-sm:3px;
+ 
+  --shadow:0 10px 24px -16px rgba(20,30,40,0.18);
+  --shadow-sm:0 4px 12px -8px rgba(20,30,40,0.16);
+ 
+  --font: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+}
+ 
+/* ---- 背景に薄いグリッド（ドット）を敷いて、単色べた塗りを回避 ---- */
+body{
+  background:
+    radial-gradient(circle, #e3e7ea 1px, transparent 1px) 0 0/22px 22px,
+    var(--bg);
+}
+ 
+/* ================= Nav ================= */
+.nav{
+  background:#ffffff;
+  border-bottom:2px solid var(--navy);
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
+}
+.nav-brand{ color:var(--navy); font-weight:700; }
+.nav-mark{
+  background:var(--blue);
+  border-radius:2px;
+}
+.nav-stat{ color:var(--ink-soft); }
+ 
+/* ================= Hero ================= */
+.hero{
+  background:
+    linear-gradient(115deg, var(--blue) 0%, var(--blue) 42%, transparent 42.3%),
+    var(--bg);
+  padding-top:80px;
+  text-align:left;
+  position:relative;
+}
+.hero::before{ content:none; }
+.eyebrow{
+  background:#ffffff;
+  color:var(--navy);
+  border:1.5px solid var(--navy);
+  border-radius:var(--radius-sm);
+  font-weight:700;
+}
+.hero h1{
+  color:#ffffff;
+  text-shadow:0 1px 0 rgba(0,0,0,0.05);
+}
+.hero h1 span{
+  background:none;
+  -webkit-background-clip:initial; background-clip:initial;
+  color:var(--yellow);
+}
+.hero p{
+  color:var(--ink);
+  background:#ffffff;
+  display:inline-block;
+  padding:14px 18px;
+  border-radius:var(--radius-md);
+  box-shadow:var(--shadow-sm);
+}
+ 
+.spec-row{ justify-content:flex-start; }
+.spec-chip{
+  background:#ffffff;
+  border:1.5px solid var(--navy);
+  border-radius:var(--radius-sm);
+  color:var(--navy);
+}
+.spec-chip b{ color:var(--blue); }
+ 
+.cta-row{ justify-content:flex-start; }
+ 
+@media (max-width:600px){
+  .hero{ background:var(--blue); }
+  .cta-row{ justify-content:center; }
+  .spec-row{ justify-content:center; }
+}
+ 
+/* ================= Buttons ================= */
+.btn{
+  border-radius:var(--radius-md);
+  font-weight:700;
+  transition:transform .1s ease, background .15s ease, box-shadow .15s ease;
+}
+.btn-primary{
+  background:var(--red);
+  box-shadow:var(--shadow-sm);
+  border-bottom:3px solid var(--red-dark);
+}
+.btn-primary:hover{ background:#e2444c; }
+.btn-secondary{
+  background:#ffffff;
+  color:var(--navy);
+  border:1.5px solid var(--navy);
+  border-radius:var(--radius-md);
+}
+.btn-secondary:hover{ background:var(--bg-alt); }
+.btn-ghost{
+  background:#ffffff;
+  color:var(--blue);
+  border:1.5px solid var(--blue);
+  border-radius:var(--radius-md);
+}
+.btn-ghost:hover{ background:var(--blue-soft); }
+ 
+/* ================= Panels ================= */
+.panel{
+  background:#ffffff;
+  border:1px solid var(--line);
+  border-top:4px solid var(--blue);
+  border-radius:var(--radius-md);
+  box-shadow:var(--shadow-sm);
+}
+.panel h3{
+  color:var(--navy);
+  position:relative;
+  padding-left:14px;
+}
+.panel h3::before{
+  content:"";
+  position:absolute; left:0; top:2px; bottom:2px;
+  width:4px; background:var(--blue);
+}
+ 
+.count-chip{
+  border:1.5px solid var(--navy);
+  border-radius:var(--radius-sm);
+  color:var(--navy);
+  background:#fff;
+}
+.count-chip:hover{ border-color:var(--blue); color:var(--blue); }
+.count-chip.active{
+  background:var(--blue);
+  border-color:var(--blue);
+  color:#fff;
+}
+.count-hint{ color:var(--ink-soft); }
+ 
+.panel-stat b{ color:var(--navy); }
+.panel-stat span{ color:var(--ink-soft); }
+ 
+.weak-tag{
+  border:1px solid var(--red);
+  border-radius:var(--radius-sm);
+  background:var(--red-soft);
+}
+.weak-tag b{ color:var(--red); }
+ 
+.history-row{
+  border:1px solid var(--line);
+  border-radius:var(--radius-sm);
+  border-left:4px solid var(--blue);
+}
+.history-row .hr-score{ color:var(--navy); }
+ 
+/* ================= Quiz screen ================= */
+.quiz-topbar .btn-ghost.small{
+  border-radius:var(--radius-sm);
+}
+ 
+.progress-track{
+  background:var(--bg-alt);
+  border:1px solid var(--line);
+  border-radius:2px;
+}
+.progress-fill{
+  background:var(--blue);
+  border-radius:2px;
+}
+ 
+.cat-badge{
+  background:var(--navy);
+  color:#fff;
+  border-radius:var(--radius-sm);
+  font-weight:700;
+}
+ 
+.qtype-label{ color:var(--blue); font-weight:700; }
+ 
+.question-card{
+  background:#ffffff;
+  border:1px solid var(--line);
+  border-top:4px solid var(--blue);
+  border-radius:var(--radius-md);
+  box-shadow:var(--shadow-sm);
+}
+.question-card p{ color:var(--navy); }
+ 
+.choice{
+  border:1.5px solid var(--line);
+  border-radius:var(--radius-md);
+  background:#fff;
+}
+.choice:hover{
+  border-color:var(--blue);
+  background:var(--blue-soft);
+}
+.choice .idx{
+  border-radius:var(--radius-sm);
+  background:var(--bg-alt);
+  color:var(--ink-soft);
+  font-weight:700;
+}
+.choice.selected{
+  border-color:var(--blue);
+  background:var(--blue-soft);
+  box-shadow:inset 4px 0 0 var(--blue);
+}
+.choice.selected .idx{ background:var(--blue); color:#fff; border-radius:var(--radius-sm); }
+ 
+/* ================= Result screen ================= */
+.result-hero{
+  background:var(--navy);
+  border-radius:var(--radius-md);
+  padding-top:56px; padding-bottom:36px;
+}
+ 
+/* 円グラフのスコアリングを、角のある帯グラフ型カードに置き換え */
+.score-ring{
+  width:auto; height:auto; border-radius:var(--radius-md);
+  background:#ffffff;
+  border:1px solid var(--line);
+  border-top:5px solid var(--blue);
+  padding:26px 40px;
+  display:inline-flex;
+}
+.score-ring::before{ content:none; }
+.score-ring .pct{ color:var(--navy); }
+.score-ring .sub{ color:var(--ink-soft); }
+ 
+.result-headline{ color:#ffffff; }
+.result-sub{ color:#c7ccd1; }
+ 
+.cat-row-top b{ color:var(--navy); }
+.cat-bar-track{ background:var(--bg-alt); border-radius:2px; border:1px solid var(--line); }
+.cat-bar-fill{ background:var(--blue); border-radius:2px; }
+ 
+.review-section h3{
+  color:var(--navy);
+  position:relative;
+  padding-left:16px;
+}
+.review-section h3::before{
+  content:"";
+  position:absolute; left:0; top:4px; bottom:4px;
+  width:4px; background:var(--blue);
+}
+ 
+.review-empty{
+  background:var(--blue-soft);
+  color:var(--blue-hover);
+  border:1px solid var(--blue);
+  border-radius:var(--radius-md);
+}
+ 
+.review-item{
+  border:1px solid var(--line);
+  border-radius:var(--radius-md);
+  border-left:4px solid var(--line);
+  background:#ffffff;
+}
+.review-item.correct{ border-left-color:var(--blue); }
+.review-item.wrong{ border-left-color:var(--red); }
+ 
+.review-item .term{ color:var(--navy); }
+.review-item .beginner{
+  background:var(--bg-alt);
+  border-radius:var(--radius-sm);
+  border:1px solid var(--line);
+}
+.review-item .your-answer{ color:var(--red); font-weight:700; }
+ 
+.result-tag{
+  border-radius:var(--radius-sm);
+  font-weight:700;
+}
+.result-tag.correct{ background:var(--blue); color:#fff; }
+.result-tag.wrong{ background:var(--red); color:#fff; }
+ 
+/* ================= Footer ================= */
+footer{
+  background:var(--navy);
+  color:#9aa1a8;
+  border-top:none;
+}
+ 
