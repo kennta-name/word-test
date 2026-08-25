@@ -35,6 +35,20 @@
   --font: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
 }
  
+/* ==========================================================================
+   モードテーマ（選択式＝ティール／記述式＝パープル）
+   body.theme-fill が付くと --blue 系トークンが総入れ替えになり、
+   ヘッダー帯・ボタン・進捗バー・枠線など画面全体の差し色が一括で
+   パープル系に切り替わる。個別クラスの上書きは行わず、
+   var(--blue) を参照している既存スタイルがそのまま追従する設計。
+   ========================================================================== */
+body.theme-fill {
+  --blue: #7c5cf5;          /* 記述式のメインアクセント（パープル） */
+  --blue-hover: #6845e0;
+  --blue-soft: #efeaff;
+  --accent-label: "記述式";
+}
+ 
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -1160,8 +1174,9 @@ footer {
   border-left: 1.5px solid var(--navy);
 }
 .mode-toggle-btn.active {
-  background: var(--navy);
+  background: var(--blue);
   color: #fff;
+  transition: background 0.25s ease, color 0.25s ease;
 }
 .mode-toggle-btn .mt-sub {
   display: block;
@@ -1346,5 +1361,46 @@ footer {
   color: var(--navy);
   font-size: 0.8125rem;
   margin-bottom: 6px;
+}
+ 
+/* ==========================================================================
+   アコーディオン見出しのモードラベル（「お気に入り問題（選択式）」等）
+   ========================================================================== */
+.accordion-mode-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--blue);
+  margin-left: 6px;
+}
+ 
+/* ==========================================================================
+   モード切替時のなめらかな配色トランジション
+   var(--blue) 系トークンを参照している主要パーツに適用し、
+   選択式⇄記述式の切り替え時に色がふわっと変化するようにする。
+   ========================================================================== */
+.hero,
+.accordion-item,
+.accordion-header::before,
+.progress-fill,
+.question-card,
+.choice,
+.choice .idx,
+.answer-panel,
+.count-chip,
+.count-chip.active,
+.btn-answer-toggle,
+.btn-answer-toggle.active,
+.fill-input,
+.mode-toggle-btn,
+.cat-badge,
+.qtype-label,
+.btn-fav-toggle,
+.accordion-mode-label,
+.nav-mark,
+.btn-ghost,
+.score-ring,
+.result-hero,
+.review-item.correct {
+  transition: background 0.25s ease, background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
 }
  
