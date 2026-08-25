@@ -847,11 +847,13 @@ function renderResultScreen(record) {
   } else if (record.pct >= 50) {
     headline.textContent = 'お疲れさまでした';
     sub.textContent = 'あと一歩です！弱点カテゴリーを重点的に見直してみてください。';
-  } else {
+  } else if (record.pct >= 30) {
     headline.textContent = '伸びしろたっぷりです！';
     sub.textContent = '繰り返し解いて、少しずつ用語に慣れていきましょう！';
+  } else {
+    headline.textContent = '正気ですか？？';
+    sub.textContent = 'まだまだやることはいっぱいありますね。努力しましょう！';
   }
- 
   const catStats = {};
   record.answers.forEach(a => {
     const c = a.question.category;
