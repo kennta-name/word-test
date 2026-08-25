@@ -4,12 +4,21 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>インフラ用語クイズ | 新人エンジニア向け</title>
-<link rel="stylesheet" href="design.css">
+<link rel="stylesheet" href="index-style.css">
 </head>
 <body>
  
 <nav class="nav">
-  <div class="nav-brand" id="navBrand"><span class="nav-mark"></span>インフラ用語クイズ</div>
+  <div class="nav-brand" id="navBrand"><span class="nav-mark"></span>インフラ用語クイズ
+  
+  <!-- 用語集への切り替えラジオボタン -->
+   <form class="nav-mode-switch">
+     <label class="rounded-btn">
+      <input type="radio" name="mode" value="word.html" checked onclick="navigate(this)">用語集へ
+     </label>
+    </form>
+  </div>
+
   <div class="nav-stat" id="navStat"></div>
 </nav>
  
@@ -1184,6 +1193,11 @@ document.getElementById('hdReviewList').addEventListener('click', handleReviewFa
 /* ---------- Initialize App ---------- */
 renderCountChips();
 renderStartStats();
+
+/* ---------- radio APP ----------------*/
+function navigate(radioButton) {
+  window.location.href = radioButton.value;
+}
 </script>
 </body>
 </html>

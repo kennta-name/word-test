@@ -101,7 +101,7 @@ body {
   font-size: 1.125rem;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap:16px;
   text-decoration: none;
 }
  
@@ -117,7 +117,48 @@ body {
   color: var(--ink-soft);
   font-size: 0.875rem;
 }
+
+.nav-mode-switch {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.9rem;
+}
+
+.nav-mode-switch label {
+  cursor: pointer;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.rounded-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  
+  background-color: #ffffff;
+  border: 1.5px solid #000000;
+  border-radius: 6px;
+  padding: 4px 12px;
+
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #333333;
+  cursor: pointer;
+  white-space: nowrap;
+
+  box-shadow: 2px 2px 0px #000000;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
  
+.rounded-btn:hover {
+  background-color: #f9f9f9;
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px #000000;
+}
+
 /* ==========================================================================
    Hero
    ========================================================================== */
