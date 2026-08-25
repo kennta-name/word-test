@@ -17,12 +17,9 @@
   <header class="chrome" id="dock">
     <div class="wrap chrome__bar">
       <div class="chrome__lead">
-        <a class="logo" href="index.html">
-          <span class="logo__mark" aria-hidden="true"></span>
-          通信・インフラ用語集
-        </a>
-        <label class="nav-radio">
-          <input type="radio" name="page-nav" value="quiz" data-href="index.html">
+        <p class="site-title">通信・インフラ用語集</p>
+        <label class="nav-radio" id="go-quiz">
+          <input type="radio" name="page-nav" value="quiz">
           問題集へ
         </label>
       </div>
@@ -3198,10 +3195,10 @@ window.addEventListener("resize", syncHeader);
 window.addEventListener("scroll", activateIndex, { passive: true });
 activateIndex();
 
-document.querySelectorAll(".nav-radio input[data-href]").forEach((input) => {
-  input.addEventListener("change", () => {
-    if (input.checked && input.dataset.href) location.href = input.dataset.href;
-  });
+document.getElementById("go-quiz")?.addEventListener("click", (event) => {
+  event.preventDefault();
+  event.stopPropagation();
+  location.href = "quiz.html";
 });
 
 document.querySelector("#to-top").addEventListener("click", (event) => {

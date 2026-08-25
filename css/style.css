@@ -96,26 +96,18 @@ input {
   align-items: center;
   gap: 28px;
   min-width: 0;
+  flex: 1;
 }
 
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  text-decoration: none;
+.site-title {
+  margin: 0;
   font-size: 12px;
   letter-spacing: 0.16em;
   white-space: nowrap;
-}
-
-.logo__mark {
-  width: 10px;
-  height: 10px;
   flex: none;
-  border: 1px solid var(--red);
-  background:
-    linear-gradient(var(--red), var(--red)) center / 100% 1px no-repeat,
-    linear-gradient(var(--red), var(--red)) center / 1px 100% no-repeat;
+  font-weight: 400;
+  cursor: default;
+  pointer-events: none;
 }
 
 .nav-radio {
@@ -126,7 +118,22 @@ input {
   padding: 0 10px;
   border: 1px solid var(--ink);
   background: var(--paper);
+  font-size: 12px;
+  letter-spacing: 0.12em;
   cursor: pointer;
+  white-space: nowrap;
+  color: var(--ink);
+  flex: none;
+  position: relative;
+  z-index: 1;
+}
+
+.nav-radio:hover {
+  background: var(--bg);
+}
+
+.nav-radio:has(input:checked) {
+  border-color: var(--red);
 }
 
 .nav-radio input {
