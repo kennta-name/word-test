@@ -99,6 +99,21 @@ input {
   flex: 1;
 }
 
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: none;
+  pointer-events: none;
+}
+
+.brand__mark {
+  width: 22px;
+  height: 22px;
+  display: block;
+  flex: none;
+}
+
 .site-title {
   margin: 0;
   font-size: 12px;
