@@ -41,7 +41,7 @@
 
   <div class="overlay" id="overlay" hidden>
     <div class="wrap">
-      <form class="search" role="search" action="#" onsubmit="return false">
+      <form class="search" role="search" action="#" id="form-search">
         <label for="q">SEARCH</label>
         <div class="search__box">
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M15.4 15.4L21 21" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
@@ -60,6 +60,10 @@
         <p class="index-label">INDEX  あ行–わ行</p>
         <nav class="index-kana" id="index-kana" aria-label="五十音索引"></nav>
       </div>
+      <div class="history" id="history-wrap">
+        <p class="index-label">HISTORY</p>
+        <ol class="history__list" id="history-list"></ol>
+      </div>
     </div>
   </div>
 
@@ -70,8 +74,8 @@
         <h1>現場でリアルに飛び交う<br>通信・インフラ用語集</h1>
         <p class="hero__lede">監視画面、夜間作業、障害連絡。そこで飛び交う言葉を、辞書のように引けるようにした。意味も、現場のニュアンスも、未経験者向けの解説も、原文のまま収録しています。</p>
         <p class="hero__stats">
-          <span>181語</span>
-          <span>5分類</span>
+          <span id="stat-ja">181語</span>
+          <span id="stat-cats">5分類</span>
           <span><span id="term-total">181</span> terms</span>
         </p>
       </div>
@@ -84,6 +88,10 @@
   </section>
 
   <main id="main" class="wrap">
+    <div class="sorts" role="group" aria-label="並べ替え">
+      <p class="sorts__label">SORT</p>
+      <div class="sorts__list" id="sort-list"></div>
+    </div>
     <p class="empty" id="empty" hidden>一致する用語はありません。読み（ひらがな）や関連語（Ping、光、冗長、SLA など）でも探せます。</p>
     <div id="groups"></div>
   </main>
@@ -96,7 +104,7 @@
       </div>
       <div>
         <p class="foot__h">収録</p>
-        <p>用語名・意味・現場でのニュアンス・未経験者向けの解説は、提供資料の原文を一語一句そのまま使用しています。</p>
+        <p>用語名・意味・現場でのニュアンス・未経験者向けの解説は、提供資料の原文を一語一句そのまま使用しています。追加・編集・削除はサーバーに保存され、URLを知っている人は同じ内容を開けます。</p>
       </div>
       <div>
         <p class="foot__h">引き方</p>
@@ -106,9 +114,85 @@
     <p class="wrap foot__end">通信・インフラ用語集</p>
   </footer>
 
-  <a class="to-top" href="#top" id="to-top" aria-label="ページ上部へ戻る">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 14l7-7 7 7" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M12 7v13" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
-  </a>
+  <div class="fab-dock">
+    <button type="button" class="fab-add" id="btn-add" aria-label="新しい用語を追加">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+    </button>
+    <a class="to-top" href="#top" id="to-top" aria-label="ページ上部へ戻る">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 14l7-7 7 7" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M12 7v13" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+    </a>
+  </div>
+
+  <dialog class="sheet" id="dlg-password" aria-labelledby="pw-title">
+    <form method="dialog" id="form-password">
+      <p class="sheet__kicker">Auth</p>
+      <h2 id="pw-title">パスワード</h2>
+      <p class="sheet__lede">用語の追加・編集には、パスワードが必要です。</p>
+      <div class="field">
+        <label for="pw-input">PASSWORD</label>
+        <input id="pw-input" type="password" name="password" autocomplete="current-password" required>
+      </div>
+      <p class="form-error" id="pw-error" hidden>パスワードが違います。</p>
+      <div class="sheet__actions">
+        <button type="submit" class="btn">確認</button>
+        <button type="button" class="btn btn--ghost" id="pw-cancel" value="cancel">キャンセル</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="sheet sheet--wide" id="dlg-term" aria-labelledby="term-form-title">
+    <form id="form-term">
+      <p class="sheet__kicker" id="term-form-kicker">New term</p>
+      <h2 id="term-form-title">用語を追加</h2>
+      <p class="sheet__lede" id="term-form-lede">ひな型の穴を埋めてください。分類を選び、意味と未経験者向けの解説を書いたうえで、必要なら下の任意欄に補足を足します。</p>
+      <div class="field">
+        <label for="f-category" class="req">分類</label>
+        <select id="f-category" name="category" required></select>
+      </div>
+      <div class="field">
+        <label for="f-name" class="req">用語名</label>
+        <input id="f-name" name="name" maxlength="80" required placeholder="例：ダークファイバ">
+      </div>
+      <div class="field">
+        <label for="f-yomi">読み（ひらがな）</label>
+        <input id="f-yomi" name="yomi" maxlength="80" placeholder="空欄なら、カタカナの用語名から自動変換します">
+      </div>
+      <div class="field">
+        <label for="f-keywords">関連キーワード</label>
+        <input id="f-keywords" name="keywords" placeholder="カンマ区切り（任意） 例：dark fiber, 未使用, 予備回線">
+      </div>
+      <div class="template-block">
+        <p class="template-block__label">意味・現場でのニュアンス</p>
+        <div class="field">
+          <label for="f-meaning" class="req">本文</label>
+          <textarea id="f-meaning" name="meaning" required placeholder="現場で使うときの意味とニュアンスを書いてください。"></textarea>
+        </div>
+        <div class="field field--optional">
+          <label for="f-meaning-extra">任意の追記</label>
+          <textarea id="f-meaning-extra" name="meaningExtra" placeholder="補足、例外、現場あるあるなど。空欄のままでも登録できます。"></textarea>
+        </div>
+      </div>
+      <div class="template-block">
+        <p class="template-block__label">未経験者向けの解説</p>
+        <div class="field">
+          <label for="f-beginner" class="req">本文</label>
+          <textarea id="f-beginner" name="beginner" required placeholder="初めて聞く人向けに、たとえを交えて書いてください。"></textarea>
+        </div>
+        <div class="field field--optional">
+          <label for="f-beginner-extra">任意の追記</label>
+          <textarea id="f-beginner-extra" name="beginnerExtra" placeholder="図の説明や、もう一段かみ砕いた補足。空欄のままでも登録できます。"></textarea>
+        </div>
+      </div>
+      <p class="form-error" id="term-error" hidden></p>
+      <div class="sheet__actions">
+        <button type="button" class="btn btn--danger" id="term-delete" hidden>この用語を削除</button>
+        <div class="sheet__actions-main">
+          <button type="submit" class="btn" id="term-submit">登録する</button>
+          <button type="button" class="btn btn--ghost" id="term-cancel">キャンセル</button>
+        </div>
+      </div>
+    </form>
+  </dialog>
 
   <script>
 const TERMS = [
@@ -2826,10 +2910,84 @@ const TERMS = [
   }
 ];
 
+const STORAGE_KEY = "infra-glossary-v1";
+const EDIT_PASSWORD = "bltinc123";
+const SORTS = [
+  { id: "gojuon", label: "五十音順" },
+  { id: "updated", label: "最新更新日" },
+  { id: "name-asc", label: "名前（昇順）" },
+  { id: "name-desc", label: "名前（降順）" },
+  { id: "id-asc", label: "ID（昇順）" },
+  { id: "id-desc", label: "ID（降順）" },
+];
+
+const emptyStore = () => ({ added: [], patched: {}, terms: null });
+const cloneTerm = (term) => ({
+  ...term,
+  keywords: [...(term.keywords || [])],
+});
+const loadStore = () => {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || "");
+    if (!parsed || typeof parsed !== "object") return emptyStore();
+    return {
+      added: Array.isArray(parsed.added) ? parsed.added : [],
+      patched: parsed.patched && typeof parsed.patched === "object" ? parsed.patched : {},
+      terms: Array.isArray(parsed.terms) ? parsed.terms : null,
+    };
+  } catch {
+    return emptyStore();
+  }
+};
+const saveStore = (store) => localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
+
+const persistLive = (historyEntry) => {
+  saveStore({ terms: TERMS.map(cloneTerm) });
+  refreshMeta();
+  saveRemote(historyEntry);
+};
+
+const saveRemote = async (historyEntry) => {
+  try {
+    const res = await fetch("/api/glossary", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        password: lastAuthPassword,
+        terms: TERMS.map(cloneTerm),
+        historyEntry: historyEntry || null,
+      }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || "保存に失敗しました。");
+    if (Array.isArray(data.history)) HISTORY = data.history;
+    lastRemoteUpdatedAt = data.updatedAt || lastRemoteUpdatedAt;
+    renderHistory();
+  } catch (error) {
+    console.error(error);
+    window.alert("共有保存に失敗しました。この端末には残っていますが、他の人の画面にはまだ届いていません。");
+  }
+};
+
+const applyStore = () => {
+  const store = loadStore();
+  if (Array.isArray(store.terms) && store.terms.length) {
+    TERMS.splice(0, TERMS.length, ...store.terms.map(cloneTerm));
+    return;
+  }
+  for (const [id, patch] of Object.entries(store.patched)) {
+    const current = TERMS.find((term) => String(term.id) === String(id));
+    if (current) Object.assign(current, patch);
+  }
+  for (const term of store.added) {
+    if (!TERMS.some((item) => item.id === term.id)) TERMS.push(cloneTerm(term));
+  }
+};
+applyStore();
 
 const AZ = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 const KANA = ["あ", "か", "さ", "た", "な", "は", "ま", "や", "ら", "わ", "数字"];
-const CATS = ["すべて", ...[...new Set(TERMS.map((t) => t.category))]];
+let CATS = ["すべて", ...[...new Set(TERMS.map((t) => t.category))]];
 
 const kanaRow = (ch) => {
   if (!ch) return "あ";
@@ -2857,16 +3015,20 @@ const primaryIndex = (term) => {
   const ch = head.charAt(0);
   if (/[0-9０-９]/.test(ch)) return "数字";
   if (/[A-Za-z]/.test(ch)) return ch.toUpperCase();
-  return kanaRow(term.yomi.charAt(0));
+  return kanaRow((term.yomi || "").charAt(0));
 };
 
+const toHiragana = (value) =>
+  String(value).replace(/[\u30A1-\u30F6]/g, (ch) => String.fromCharCode(ch.charCodeAt(0) - 0x60));
+
+const toKatakana = (value) =>
+  String(value).replace(/[\u3041-\u3096]/g, (ch) => String.fromCharCode(ch.charCodeAt(0) + 0x60));
+
 const normalize = (value) =>
-  value
-    .toString()
-    .normalize("NFKC")
+  toHiragana(value.toString().normalize("NFKC"))
     .toLowerCase()
-    .replace(/[ァ-ヶ]/g, (ch) => String.fromCharCode(ch.charCodeAt(0) - 0x60))
-    .replace(/[\s　、。・/／\\-_—–:：()（）『』「」【】\[\]\"\"''.,]/g, "");
+    .replace(/[ー−‐‑–—―ｰ]/g, "")
+    .replace(/[^\p{L}\p{N}]+/gu, "");
 
 const escapeHtml = (value) =>
   value
@@ -2880,7 +3042,20 @@ const highlight = (text, query) => {
   const raw = (query || "").trim();
   if (!raw) return safe;
   try {
-    const re = new RegExp(raw.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi");
+    const pattern = [...raw.normalize("NFKC")]
+      .map((ch) => {
+        const code = ch.charCodeAt(0);
+        const esc = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        if (code >= 0x3041 && code <= 0x3096) {
+          return `[${esc(ch)}${esc(String.fromCharCode(code + 0x60))}]`;
+        }
+        if (code >= 0x30A1 && code <= 0x30F6) {
+          return `[${esc(String.fromCharCode(code - 0x60))}${esc(ch)}]`;
+        }
+        return esc(ch);
+      })
+      .join("");
+    const re = new RegExp(pattern, "gi");
     return safe.replace(re, (m) => `<mark>${m}</mark>`);
   } catch {
     return safe;
@@ -2889,11 +3064,29 @@ const highlight = (text, query) => {
 
 const haystack = (term) =>
   normalize(
-    [term.name, term.yomi, term.category, term.meaning, term.beginner, ...(term.keywords || [])].join(" ")
+    [term.name, term.yomi, term.category, term.meaning, term.meaningExtra || "", term.beginner, term.beginnerExtra || "", ...(term.keywords || [])].join(" ")
   );
 
+const matchesQuery = (term, q) => {
+  const nq = normalize(q);
+  if (!nq) return true;
+  if (haystack(term).includes(nq)) return true;
+  const hira = toHiragana(String(q).normalize("NFKC")).toLowerCase();
+  const kata = toKatakana(hira);
+  const fields = [term.name, term.yomi, term.meaning, term.beginner, ...(term.keywords || [])];
+  return fields.some((field) => {
+    const raw = String(field || "");
+    const folded = toHiragana(raw.normalize("NFKC")).toLowerCase();
+    return raw.includes(q) || raw.includes(hira) || raw.includes(kata) || folded.includes(hira);
+  });
+};
+
 const pad = (id) => String(id).padStart(3, "0");
-const indexOf = Object.fromEntries(TERMS.map((t) => [t.id, primaryIndex(t)]));
+let indexOf = Object.fromEntries(TERMS.map((t) => [t.id, primaryIndex(t)]));
+const refreshMeta = () => {
+  CATS = ["すべて", ...[...new Set(TERMS.map((t) => t.category))]];
+  indexOf = Object.fromEntries(TERMS.map((t) => [t.id, primaryIndex(t)]));
+};
 
 const nameTokens = (name) =>
   name
@@ -2927,7 +3120,15 @@ const findRelated = (term) => {
   return uniq;
 };
 
-const state = { q: "", cat: "すべて" };
+const sortKeyName = (term) => toHiragana((term.yomi || term.name).normalize("NFKC")).toLowerCase();
+const storedSort = () => {
+  try {
+    const value = localStorage.getItem(STORAGE_KEY + ":sort");
+    if (SORTS.some((item) => item.id === value)) return value;
+  } catch {}
+  return "gojuon";
+};
+const state = { q: "", cat: "すべて", sort: storedSort() };
 
 const els = {
   q: document.querySelector("#q"),
@@ -2944,18 +3145,119 @@ const els = {
   chrome: document.querySelector("#dock"),
   btnFinder: document.querySelector("#btn-finder"),
   overlay: document.querySelector("#overlay"),
+  sortList: document.querySelector("#sort-list"),
+  btnAdd: document.querySelector("#btn-add"),
+  dlgPassword: document.querySelector("#dlg-password"),
+  dlgTerm: document.querySelector("#dlg-term"),
+  formPassword: document.querySelector("#form-password"),
+  formTerm: document.querySelector("#form-term"),
+  pwInput: document.querySelector("#pw-input"),
+  pwError: document.querySelector("#pw-error"),
+  pwCancel: document.querySelector("#pw-cancel"),
+  fCategory: document.querySelector("#f-category"),
+  fName: document.querySelector("#f-name"),
+  fYomi: document.querySelector("#f-yomi"),
+  fKeywords: document.querySelector("#f-keywords"),
+  fMeaning: document.querySelector("#f-meaning"),
+  fMeaningExtra: document.querySelector("#f-meaning-extra"),
+  fBeginner: document.querySelector("#f-beginner"),
+  fBeginnerExtra: document.querySelector("#f-beginner-extra"),
+  termError: document.querySelector("#term-error"),
+  termSubmit: document.querySelector("#term-submit"),
+  termCancel: document.querySelector("#term-cancel"),
+  termDelete: document.querySelector("#term-delete"),
+  termFormTitle: document.querySelector("#term-form-title"),
+  termFormKicker: document.querySelector("#term-form-kicker"),
+  termFormLede: document.querySelector("#term-form-lede"),
+  finderIndex: document.querySelector("#finder-index"),
+  historyList: document.querySelector("#history-list"),
+  statJa: document.querySelector("#stat-ja"),
+  statCats: document.querySelector("#stat-cats"),
 };
+
+let formMode = "add";
+let editingId = null;
+let pendingAction = null;
+let pendingEditId = null;
+let lastAuthPassword = "";
+let lastRemoteUpdatedAt = "";
+let HISTORY = [];
 
 els.total.textContent = String(TERMS.length);
 
+const sortTerms = (list) => {
+  const copy = [...list];
+  if (state.sort === "updated") {
+    copy.sort((a, b) => (b.updatedAt ? Date.parse(b.updatedAt) : 0) - (a.updatedAt ? Date.parse(a.updatedAt) : 0) || b.id - a.id);
+    return copy;
+  }
+  if (state.sort === "name-asc") {
+    copy.sort((a, b) => sortKeyName(a).localeCompare(sortKeyName(b), "ja") || a.id - b.id);
+    return copy;
+  }
+  if (state.sort === "name-desc") {
+    copy.sort((a, b) => sortKeyName(b).localeCompare(sortKeyName(a), "ja") || b.id - a.id);
+    return copy;
+  }
+  if (state.sort === "id-asc") {
+    copy.sort((a, b) => a.id - b.id);
+    return copy;
+  }
+  if (state.sort === "id-desc") {
+    copy.sort((a, b) => b.id - a.id);
+    return copy;
+  }
+  copy.sort((a, b) => sortKeyName(a).localeCompare(sortKeyName(b), "ja") || a.id - b.id);
+  return copy;
+};
+
 const visibleTerms = () => {
   const qn = normalize(state.q);
-  return TERMS.filter((term) => {
+  return sortTerms(TERMS.filter((term) => {
     if (state.cat !== "すべて" && term.category !== state.cat) return false;
     if (!qn) return true;
-    return haystack(term).includes(qn);
-  });
+    return matchesQuery(term, state.q);
+  }));
 };
+
+const renderSorts = () => {
+  els.sortList.innerHTML = SORTS.map(
+    (item) => `<button type="button" class="${state.sort === item.id ? "is-on" : ""}" data-sort="${item.id}">${item.label}</button>`
+  ).join("");
+};
+
+const formatUpdated = (iso) => {
+  if (!iso) return "";
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return "";
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}.${m}.${d}`;
+};
+
+const historyActionLabel = (action) => {
+  if (action === "add") return "追加";
+  if (action === "edit") return "編集";
+  if (action === "delete") return "削除";
+  return action || "";
+};
+
+const renderHistory = () => {
+  if (!els.historyList) return;
+  if (!HISTORY.length) {
+    els.historyList.innerHTML = `<li class="history__empty">共有の更新はまだありません。</li>`;
+    return;
+  }
+  els.historyList.innerHTML = HISTORY.slice(0, 20)
+    .map((item) => {
+      const when = formatUpdated(item.at);
+      return `<li><span class="history__when">${when}</span><span class="history__act">${historyActionLabel(item.action)}</span><span>${escapeHtml(item.name || "")}</span></li>`;
+    })
+    .join("");
+};
+
+const sortHeading = () => SORTS.find((item) => item.id === state.sort)?.label || "一覧";
 
 const renderIndex = (visible) => {
   const present = new Set(visible.map((t) => indexOf[t.id]));
@@ -2977,9 +3279,14 @@ const renderCats = () => {
   ).join("");
 };
 
+const extraBlock = (text) => {
+  if (!text) return "";
+  return `<p class="block__extra">${highlight(text, state.q).replaceAll("\n", "<br />")}</p>`;
+};
+
 const renderTerm = (term) => {
   const related = findRelated(term);
-  const hasDiagram = term.beginner.includes("[Switch");
+  const hasDiagram = (term.beginner || "").includes("[Switch");
   const beginnerText = hasDiagram ? term.beginner.split("\n")[0] : term.beginner;
   const rest = hasDiagram ? term.beginner.split("\n").slice(1).join("\n") : "";
   const beginnerHtml = highlight(beginnerText, state.q).replaceAll("\n", "<br />");
@@ -2990,25 +3297,31 @@ const renderTerm = (term) => {
         .map((r) => `<a href="#term-${r.id}">${escapeHtml(r.name)}</a>`)
         .join("")}</div>`
     : "";
+  const updated = formatUpdated(term.updatedAt);
+  const updatedHtml = updated ? `<span class="term__updated">${updated} 更新</span>` : "";
 
   return `
     <article class="term" id="term-${term.id}">
       <div>
         <span class="term__id">No.${pad(term.id)}</span>
         <span class="term__cat">${term.category}</span>
+        ${updatedHtml}
+        <button type="button" class="term__edit" data-edit="${term.id}">編集</button>
       </div>
       <div>
         <h3 class="term__name">${highlight(term.name, state.q)}</h3>
-        <p class="term__yomi">${term.yomi}</p>
+        <p class="term__yomi">${escapeHtml(term.yomi || "")}</p>
         <div class="term__grid">
           <div class="block">
             <p class="block__label">意味・現場でのニュアンス</p>
             <p>${meaningHtml}</p>
+            ${extraBlock(term.meaningExtra)}
           </div>
           <div class="block block--note">
             <p class="block__label">未経験者向けの解説</p>
             <p>${beginnerHtml}</p>
             ${diagram}
+            ${extraBlock(term.beginnerExtra)}
           </div>
         </div>
         ${relatedHtml}
@@ -3030,6 +3343,19 @@ const renderGroups = (visible) => {
     return;
   }
   els.empty.hidden = true;
+  if (state.sort !== "gojuon") {
+    els.groups.innerHTML = `
+      <section class="group" id="idx-list">
+        <header class="group__head">
+          <div class="group__letter">#</div>
+          <h2 class="group__title">${sortHeading()}</h2>
+          <span class="group__n">${visible.length}語</span>
+        </header>
+        ${visible.map(renderTerm).join("")}
+      </section>`;
+    els.count.textContent = `${visible.length} / ${TERMS.length}`;
+    return;
+  }
   const order = [...AZ, ...KANA];
   const buckets = new Map();
   for (const term of visible) {
@@ -3081,21 +3407,36 @@ const renderToday = () => {
 
 const render = () => {
   const visible = visibleTerms();
+  els.total.textContent = String(TERMS.length);
+  if (els.statJa) els.statJa.textContent = TERMS.length + "語";
+  if (els.statCats) els.statCats.textContent = (CATS.length - 1) + "分類";
   renderCats();
+  renderSorts();
   renderIndex(visible);
   renderGroups(visible);
   renderToday();
   els.clear.hidden = !state.q;
   els.btnFinder.classList.toggle("has-query", Boolean(state.q));
+  if (els.finderIndex) els.finderIndex.hidden = state.sort !== "gojuon";
+  renderHistory();
 };
 
-els.q.addEventListener("input", () => {
-  state.q = els.q.value;
+const applyQuery = (value) => {
+  state.q = value;
   const url = new URL(location.href);
   if (state.q) url.searchParams.set("q", state.q);
   else url.searchParams.delete("q");
   history.replaceState(null, "", url);
   render();
+};
+
+els.q.addEventListener("input", (event) => {
+  if (event.isComposing) return;
+  applyQuery(els.q.value);
+});
+
+els.q.addEventListener("compositionend", () => {
+  applyQuery(els.q.value);
 });
 
 els.clear.addEventListener("click", () => {
@@ -3112,6 +3453,14 @@ els.cats.addEventListener("click", (event) => {
   const btn = event.target.closest("[data-cat]");
   if (!btn) return;
   state.cat = btn.dataset.cat;
+  render();
+});
+
+els.sortList.addEventListener("click", (event) => {
+  const btn = event.target.closest("[data-sort]");
+  if (!btn) return;
+  state.sort = btn.dataset.sort;
+  localStorage.setItem(STORAGE_KEY + ":sort", state.sort);
   render();
 });
 
@@ -3134,6 +3483,12 @@ els.btnFinder.addEventListener("click", (event) => {
   setOpen();
 });
 
+document.querySelector("#form-search").addEventListener("submit", (event) => {
+  event.preventDefault();
+  applyQuery(els.q.value);
+  setOpen(false);
+});
+
 const jumpFromIndex = (event) => {
   const a = event.target.closest('a[href^="#idx-"]');
   if (!a) return;
@@ -3150,7 +3505,7 @@ els.kana.addEventListener("click", jumpFromIndex);
 
 document.addEventListener("click", (event) => {
   if (!document.body.classList.contains("is-finder-open")) return;
-  if (event.target.closest("#overlay") || event.target.closest("#btn-finder")) return;
+  if (event.target.closest("#overlay") || event.target.closest("#btn-finder") || event.target.closest("dialog") || event.target.closest("#btn-add")) return;
   setOpen(false);
 });
 
@@ -3165,7 +3520,7 @@ document.addEventListener(
       }
       return;
     }
-    if (event.key === "/" && document.activeElement !== els.q && event.target.tagName !== "INPUT") {
+    if (event.key === "/" && document.activeElement !== els.q && event.target.tagName !== "INPUT" && event.target.tagName !== "TEXTAREA" && event.target.tagName !== "SELECT") {
       event.preventDefault();
       setOpen(true);
     }
@@ -3197,12 +3552,254 @@ const syncHeader = () => {
   document.documentElement.style.setProperty("--dock", `${h}px`);
 };
 
+const fillCategorySelect = (selected) => {
+  const cats = CATS.filter((cat) => cat !== "すべて");
+  els.fCategory.innerHTML = cats
+    .map((cat) => `<option value="${escapeHtml(cat)}">${escapeHtml(cat)}</option>`)
+    .join("");
+  if (selected && cats.includes(selected)) els.fCategory.value = selected;
+};
+
+const resetTermForm = () => {
+  els.formTerm.reset();
+  els.termError.hidden = true;
+  els.termError.textContent = "";
+  els.termDelete.hidden = true;
+};
+
+const openAddForm = () => {
+  formMode = "add";
+  editingId = null;
+  resetTermForm();
+  fillCategorySelect("物理・配線");
+  els.termFormKicker.textContent = "New term";
+  els.termFormTitle.textContent = "用語を追加";
+  els.termFormLede.textContent = "ひな型の穴を埋めてください。分類を選び、意味と未経験者向けの解説を書いたうえで、必要なら下の任意欄に補足を足します。";
+  els.termSubmit.textContent = "登録する";
+  els.termDelete.hidden = true;
+  els.dlgTerm.showModal();
+  els.fName.focus();
+};
+
+const populateTermForm = (term) => {
+  fillCategorySelect(term.category);
+  els.fName.value = term.name;
+  els.fYomi.value = term.yomi || "";
+  els.fKeywords.value = (term.keywords || []).join("、");
+  els.fMeaning.value = term.meaning || "";
+  els.fMeaningExtra.value = term.meaningExtra || "";
+  els.fBeginner.value = term.beginner || "";
+  els.fBeginnerExtra.value = term.beginnerExtra || "";
+};
+
+const openEditForm = (term) => {
+  formMode = "edit";
+  editingId = term.id;
+  resetTermForm();
+  populateTermForm(term);
+  els.termFormKicker.textContent = "No." + pad(term.id);
+  els.termFormTitle.textContent = "用語を編集";
+  els.termFormLede.textContent = "既存の用語を、同じひな型で直します。意味と未経験者向けの解説は残したまま、任意欄だけ足すこともできます。";
+  els.termSubmit.textContent = "更新する";
+  els.termDelete.hidden = false;
+  els.dlgTerm.showModal();
+  els.fName.focus();
+};
+
+const askPassword = (action, termId = null) => {
+  pendingAction = action;
+  pendingEditId = termId;
+  els.pwError.hidden = true;
+  els.pwInput.value = "";
+  els.dlgPassword.showModal();
+  els.pwInput.focus();
+};
+
+els.btnAdd.addEventListener("click", () => {
+  setOpen(false);
+  askPassword("add");
+});
+
+els.groups.addEventListener("click", (event) => {
+  const btn = event.target.closest("[data-edit]");
+  if (!btn) return;
+  const id = Number(btn.dataset.edit);
+  const term = TERMS.find((item) => item.id === id);
+  if (!term) return;
+  setOpen(false);
+  askPassword("edit", id);
+});
+
+els.formPassword.addEventListener("submit", (event) => {
+  event.preventDefault();
+  if (els.pwInput.value !== EDIT_PASSWORD) {
+    els.pwError.hidden = false;
+    els.pwInput.focus();
+    els.pwInput.select();
+    return;
+  }
+  lastAuthPassword = els.pwInput.value;
+  els.pwError.hidden = true;
+  els.dlgPassword.close();
+  const action = pendingAction;
+  const termId = pendingEditId;
+  pendingAction = null;
+  pendingEditId = null;
+  if (action === "add") {
+    openAddForm();
+    return;
+  }
+  const term = TERMS.find((item) => item.id === termId);
+  if (term) openEditForm(term);
+});
+
+els.pwCancel.addEventListener("click", () => {
+  pendingAction = null;
+  pendingEditId = null;
+  els.dlgPassword.close();
+});
+els.termCancel.addEventListener("click", () => els.dlgTerm.close());
+els.termDelete.addEventListener("click", () => deleteCurrentTerm());
+
+const parseKeywords = (value) =>
+  value.split(/[,、，]/).map((item) => item.trim()).filter(Boolean);
+
+const inferYomi = (name, yomi) => {
+  const trimmed = (yomi || "").trim();
+  if (trimmed) return toHiragana(trimmed.normalize("NFKC"));
+  return toHiragana(name.replace(/[（(].*/, "").trim().normalize("NFKC"));
+};
+
+const nextId = () => (TERMS.reduce((max, term) => Math.max(max, Number(term.id) || 0), 0) || 0) + 1;
+
+const packIds = () => {
+  TERMS.sort((a, b) => a.id - b.id);
+  TERMS.forEach((term, index) => {
+    term.id = index + 1;
+  });
+};
+
+const persistTerm = (term, mode) => {
+  if (mode === "add") {
+    TERMS.push(term);
+  } else {
+    const live = TERMS.find((item) => item.id === term.id);
+    if (live) Object.assign(live, term);
+  }
+  persistLive({ action: mode === "add" ? "add" : "edit", id: term.id, name: term.name });
+};
+
+const deleteCurrentTerm = () => {
+  if (formMode !== "edit" || editingId == null) return;
+  const ok = window.confirm("この用語を削除します。あとのIDは詰まり、次に作る用語は空いた番号になります。");
+  if (!ok) return;
+  const index = TERMS.findIndex((item) => item.id === editingId);
+  if (index < 0) return;
+  const removed = TERMS[index];
+  TERMS.splice(index, 1);
+  packIds();
+  persistLive({ action: "delete", id: removed.id, name: removed.name });
+  els.dlgTerm.close();
+  const url = new URL(location.href);
+  if (url.hash === "#term-" + editingId) url.hash = "";
+  history.replaceState(null, "", url);
+  editingId = null;
+  render();
+};
+
+const gatherFormTerm = (id) => {
+  const name = els.fName.value.trim();
+  const meaning = els.fMeaning.value.trim();
+  const beginner = els.fBeginner.value.trim();
+  const category = els.fCategory.value;
+  if (!name || !meaning || !beginner || !category) {
+    return { error: "分類・用語名・意味・未経験者向けの解説は必須です。" };
+  }
+  return {
+    term: {
+      id,
+      category,
+      name,
+      yomi: inferYomi(name, els.fYomi.value),
+      meaning,
+      meaningExtra: els.fMeaningExtra.value.trim(),
+      beginner,
+      beginnerExtra: els.fBeginnerExtra.value.trim(),
+      keywords: parseKeywords(els.fKeywords.value),
+      updatedAt: new Date().toISOString(),
+    },
+  };
+};
+
+const revealTerm = (term) => {
+  state.q = "";
+  els.q.value = "";
+  state.cat = "すべて";
+  const url = new URL(location.href);
+  url.searchParams.delete("q");
+  url.hash = "term-" + term.id;
+  history.replaceState(null, "", url);
+  render();
+  const target = document.querySelector("#term-" + term.id);
+  if (target) {
+    target.classList.add("is-flash");
+    target.scrollIntoView({ block: "start" });
+  }
+};
+
+els.formTerm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const id = formMode === "edit" ? editingId : nextId();
+  const result = gatherFormTerm(id);
+  if (result.error) {
+    els.termError.hidden = false;
+    els.termError.textContent = result.error;
+    return;
+  }
+  persistTerm(result.term, formMode);
+  els.dlgTerm.close();
+  revealTerm(result.term);
+});
+
 render();
 if (state.q) setOpen(true);
 syncHeader();
 window.addEventListener("resize", syncHeader);
 window.addEventListener("scroll", activateIndex, { passive: true });
 activateIndex();
+
+const applyRemoteGlossary = (data) => {
+  if (!data || !Array.isArray(data.terms) || !data.terms.length) return false;
+  if (data.updatedAt && data.updatedAt === lastRemoteUpdatedAt) return false;
+  TERMS.splice(0, TERMS.length, ...data.terms.map(cloneTerm));
+  HISTORY = Array.isArray(data.history) ? data.history : [];
+  lastRemoteUpdatedAt = data.updatedAt || lastRemoteUpdatedAt;
+  persistLiveLocal();
+  refreshMeta();
+  render();
+  return true;
+};
+
+const persistLiveLocal = () => {
+  saveStore({ terms: TERMS.map(cloneTerm) });
+};
+
+const loadRemote = async () => {
+  try {
+    const res = await fetch("/api/glossary", { cache: "no-store" });
+    if (!res.ok) return;
+    const data = await res.json();
+    applyRemoteGlossary(data);
+  } catch {
+    /* keep local seed */
+  }
+};
+
+loadRemote();
+window.setInterval(() => {
+  if (els.dlgTerm?.open || els.dlgPassword?.open) return;
+  loadRemote();
+}, 20000);
 
 document.getElementById("go-quiz")?.addEventListener("click", (event) => {
   event.preventDefault();
