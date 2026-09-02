@@ -1234,6 +1234,50 @@ footer {
 .mode-toggle-btn span {
   pointer-events: none;
 } 
+
+.mode-toggle-2 {
+  display: flex;
+  border: 1.5px solid var(--navy);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin-bottom: 24px;
+  background: #fff;
+}
+.mode-toggle-btn-2 {
+  flex: 1;
+  background: #fff;
+  color: var(--navy);
+  border: none;
+  padding: 14px 16px;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.mode-toggle-btn-2 + .mode-toggle-btn-2 {
+  border-left: 1.5px solid var(--navy);
+}
+.mode-toggle-btn-2.active {
+  background: var(--blue);
+  color: #fff;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+.mode-toggle-btn-2 .mt-sub {
+  display: block;
+  font-weight: 400;
+  font-size: 0.75rem;
+  margin-top: 2px;
+  opacity: 0.75;
+}
+.mode-toggle-btn-2:hover,
+.mode-toggle-btn-2.active:hover {
+  background-color:#6b7280;
+  color: #ffffff;
+}
+.mode-toggle-btn-2 span {
+  pointer-events: none;
+} 
 /* ==========================================================================
    アコーディオン（出題数・お気に入り・記録）
    ========================================================================== */
