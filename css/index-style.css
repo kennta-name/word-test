@@ -1226,8 +1226,10 @@ footer {
   margin-top: 2px;
   opacity: 0.75;
 }
-.mode-toggle-btn:hover {
+.mode-toggle-btn:hover,
+.mode-toggle-btn.active:hover {
   background-color: var(--blue-hover);
+  color: #ffffff;
 }
 .mode-toggle-btn span {
   pointer-events: none;
